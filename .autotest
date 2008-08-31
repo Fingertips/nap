@@ -1,0 +1,25 @@
+Autotest.add_hook :initialize do |at|
+  at.unit_diff = 'cat'
+  at.failed_results_re = /^\s+\d+\) (?:Failure|Error):\n(.*?)\((.*?)\)\n\[([^:]*):.*\]/
+  
+  at.add_exception %r%\.git%
+  
+  at.clear_mappings
+  
+  at.add_mapping %r%^lib/(.*).rb% do |_, match|
+    sqwat = match[1].gsub('/', '_')
+    "test/#{sqwat}_test.rb"
+  end
+  
+  at.add_mapping %r%^test/.*_test\.rb% do |filename, _|
+    filename
+  end
+  
+  class << at
+    def consolidate_failures(failed)
+      failed.inject(new_hash_of_arrays) do |filters, (method, klass, filename)|
+        filters[File.expand_path(filename)] << method; filters
+      end
+    end
+  end
+end

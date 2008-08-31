@@ -7,3 +7,14 @@ task :test do
     load file
   end
 end
+
+namespace :gem do
+  desc "Build the gem"
+  task :build do
+    sh 'gem build nap.gemspec'
+  end
+  
+  task :install => :build do
+    sh 'sudo gem install nap-*.gem'
+  end
+end

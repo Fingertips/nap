@@ -45,7 +45,25 @@ describe "A REST Request" do
     request.request.body.should == body
     
     response.status_code.should == 200
-    response.body.should == 'It works!'    
+    response.body.should == 'It works!'
+  end
+  
+  it "should move body to the underlying request object" do
+    body = 'It works!'
+    request = REST::Request.new(:post, URI.parse('http://example.com/resources'), body)
+    
+    post = mock()
+    post.expects(:body=).with(body)
+    Net::HTTP::Post.stubs(:new).with(request.url.path, {}).returns(post)
+    
+    request.perform
+  end
+  
+  it "should move headers to the underlying request object" do
+    headers = {'Accepts' => 'text/html', 'X-Helo' => 'Hi there!'}
+    request = REST::Request.new(:post, URI.parse('http://example.com/resources'), '', headers)
+    Net::HTTP::Post.expects(:new).with(request.url.path, headers).returns(stub(:body= => ''))
+    request.perform
   end
   
   it "should move the response headers to the REST::Response object" do

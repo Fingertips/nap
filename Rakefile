@@ -1,3 +1,5 @@
+require 'rake/rdoctask'
+
 desc "Run all specs by default"
 task :default => :test
 
@@ -16,5 +18,13 @@ namespace :gem do
   
   task :install => :build do
     sh 'sudo gem install nap-*.gem'
+  end
+end
+
+namespace :documentation do
+  Rake::RDocTask.new(:generate) do |rd|
+    rd.main = "README"
+    rd.rdoc_files.include("README", "LICENSE", "lib/**/*.rb")
+    rd.options << "--all" << "--charset" << "utf-8"
   end
 end

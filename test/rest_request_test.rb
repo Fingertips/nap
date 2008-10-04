@@ -1,6 +1,5 @@
 require File.expand_path('../helper', __FILE__)
 require 'rest'
-require 'json'
 require 'uri'
 
 describe "A REST Request" do
@@ -27,7 +26,7 @@ describe "A REST Request" do
   end
   
   it "should PUT a resource" do
-    body = {'example' => true}.to_json
+    body = 'name=Manfred'
     request = REST::Request.new(:put, URI.parse('http://example.com/resources/1'), body)
     
     response = request.perform
@@ -38,7 +37,7 @@ describe "A REST Request" do
   end
   
   it "should POST a resource" do
-    body = {'example' => true}.to_json
+    body = 'name=Manfred'
     request = REST::Request.new(:post, URI.parse('http://example.com/resources'), body)
     
     response = request.perform
@@ -70,5 +69,11 @@ describe "A REST Request" do
     request = REST::Request.new(:get, URI.parse('http://example.com/resources/1'))
     response = request.perform
     response.headers['content-type'].should == ['text/html']
+  end
+  
+  it "should move basic authentication credentials to the underlying request object" do
+    request = REST::Request.new(:post, URI.parse('http://example.com/resources'), '', {}, {:username => 'admin', :password => 'secret'})
+    Net::HTTP::Post.any_instance.expects(:basic_auth).with('admin', 'secret')
+    request.perform
   end
 end

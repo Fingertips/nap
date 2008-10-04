@@ -1,32 +1,31 @@
 require File.expand_path('../helper', __FILE__)
 require 'rest'
-require 'json'
 require 'uri'
 
 describe "REST" do
   it "should GET a resource" do
     uri = 'http://example.com/resources/1'
-    REST::Request.expects(:perform).with(:get, URI.parse(uri), nil, {})
+    REST::Request.expects(:perform).with(:get, URI.parse(uri), nil, {}, {})
     REST.get(uri)
   end
   
   it "should HEAD a resource" do
     uri = 'http://example.com/resources/1'
-    REST::Request.expects(:perform).with(:head, URI.parse(uri), nil, {})
+    REST::Request.expects(:perform).with(:head, URI.parse(uri), nil, {}, {})
     REST.head(uri)
   end
   
   it "should PUT a resource" do
     uri = 'http://example.com/resources/1'
-    body = {'example' => true}.to_json
-    REST::Request.expects(:perform).with(:put, URI.parse(uri), body, {})
+    body = 'name=Manfred'
+    REST::Request.expects(:perform).with(:put, URI.parse(uri), body, {}, {})
     REST.put(uri, body)
   end
   
   it "should POST a resource" do
     uri = 'http://example.com/resources'
-    body = {'example' => true}.to_json
-    REST::Request.expects(:perform).with(:post, URI.parse(uri), body, {})
+    body = 'name=Manfred'
+    REST::Request.expects(:perform).with(:post, URI.parse(uri), body, {}, {})
     REST.post(uri, body)
   end
 end

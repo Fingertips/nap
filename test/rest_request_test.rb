@@ -76,4 +76,11 @@ describe "A REST Request" do
     Net::HTTP::Post.any_instance.expects(:basic_auth).with('admin', 'secret')
     request.perform
   end
+  
+  it "should raise an argumenterror for unknown verbs" do
+    request = REST::Request.new(:unknown, '')
+    lambda {
+      request.perform
+    }.should.raise(ArgumentError)
+  end
 end

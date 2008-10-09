@@ -62,7 +62,7 @@ module REST #:nodoc:
       end
       
       response = Net::HTTP.new(url.host, url.port).start {|http| http.request(request) }
-      REST::Response.new(response.code, response.__send__(:instance_variable_get, '@header'), response.body)
+      REST::Response.new(response.code, response.instance_variable_get('@header'), response.body)
     end
     
     # Shortcut for REST::Request.new(*args).perform.

@@ -77,6 +77,14 @@ describe "A REST Request" do
     request.perform
   end
   
+  it "should GET a resource from an HTTPS URL" do
+    request = REST::Request.new(:get, URI.parse('https://example.com/resources/1'))
+    response = request.perform
+    
+    response.status_code.should == 200
+    response.body.should == 'It works!'
+  end
+  
   it "should raise an argumenterror for unknown verbs" do
     request = REST::Request.new(:unknown, '')
     lambda {

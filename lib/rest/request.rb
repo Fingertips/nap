@@ -60,8 +60,29 @@ module REST #:nodoc:
       if options[:username] and options[:password]
         request.basic_auth(options[:username], options[:password])
       end
+            
+      http_request = Net::HTTP.new(url.host, url.port)
       
-      response = Net::HTTP.new(url.host, url.port).start {|http| http.request(request) }
+      # enable SSL/TLS
+      if url.scheme == "https"
+        require 'net/https'
+        http_request.use_ssl = true
+        
+        if options[:verify_ssl]
+          verify_mode = OpenSSL::SSL::VERIFY_PEER
+          # raise if certificate does not match host
+          http_request.enable_post_connection_check = true
+
+          # from http://curl.haxx.se/ca/cacert.pem
+          http_request.ca_file = File.join(File.dirname(__FILE__), "/../../support/cacert.pem")
+        else
+          verify_mode = OpenSSL::SSL::VERIFY_NONE
+        end
+        
+        http_request.verify_mode = verify_mode
+      end
+      
+      response = http_request.start {|http| http.request(request) }
       REST::Response.new(response.code, response.instance_variable_get('@header'), response.body)
     end
     

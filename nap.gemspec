@@ -14,7 +14,7 @@ Gem::Specification.new do |spec|
     Nap is a really simple REST API.
   EOF
 
-  spec.files = Dir['lib/**/*.rb']
+  spec.files = Dir['lib/**/*.rb', "support/*"]
 
   spec.has_rdoc = true
   spec.extra_rdoc_files = ['README', 'LICENSE']

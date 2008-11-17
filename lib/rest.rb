@@ -31,6 +31,20 @@ module REST
   def self.head(uri, headers={}, options={})
     REST::Request.perform(:head, URI.parse(uri), nil, headers, options)
   end
+
+  # Performs a DELETE on a resource. See REST::Request.new for a complete discussion of options.
+  #
+  #   response = REST.delete('http://example.com/pigeons/12')
+  #   if response.ok?
+  #     puts "Your pigeon exists!"
+  #   elsif response.found?
+  #     puts "Someone moved your pigeon!"
+  #   else
+  #     puts "Couldn't delete your pigeon (#{response.status_code})"
+  #   end  
+  def self.delete(uri, headers={}, options={})
+    REST::Request.perform(:delete, URI.parse(uri), nil, headers, options)
+  end
   
   # Performs a PUT on a resource. See REST::Request.new for a complete discussion of options.
   #

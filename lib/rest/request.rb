@@ -47,6 +47,8 @@ module REST #:nodoc:
         self.request = Net::HTTP::Get.new(url.path, headers)
       when :head
         self.request = Net::HTTP::Head.new(url.path, headers)
+      when :delete
+        self.request = Net::HTTP::Delete.new(url.path, headers)
       when :put
         self.request = Net::HTTP::Put.new(url.path, headers)
         self.request.body = body

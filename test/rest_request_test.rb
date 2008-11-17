@@ -24,6 +24,13 @@ describe "A REST Request" do
     
     response.status_code.should == 200
   end
+
+  it "should DELETE a resource" do
+    request = REST::Request.new(:delete, URI.parse('http://example.com/resources/1'))
+    response = request.perform
+    
+    response.status_code.should == 200
+  end
   
   it "should PUT a resource" do
     body = 'name=Manfred'

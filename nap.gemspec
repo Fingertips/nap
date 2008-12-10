@@ -2,7 +2,7 @@ require 'rubygems'
 
 Gem::Specification.new do |spec|
   spec.name = 'nap'
-  spec.version = '0.2'
+  spec.version = '0.3'
   
   spec.author = "Manfred Stienstra"
   spec.email = "manfred@fngtps.com"

@@ -1,4 +1,4 @@
 PUSH A NEW GEM
 
 rubyforge login
-rubyforge add_release fingertips Nap 'Nap-0.2' nap-0.2.gem
+rubyforge add_release fingertips Nap 'Nap-0.3' nap-0.3.gem

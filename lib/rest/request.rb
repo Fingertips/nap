@@ -1,7 +1,7 @@
 require 'uri'
 require 'net/http'
 
-module REST #:nodoc:
+module REST
   # Request holds a HTTP request
   class Request
     attr_accessor :verb, :url, :body, :headers, :options, :request

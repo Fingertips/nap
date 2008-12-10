@@ -1,4 +1,4 @@
-module REST #:nodoc:
+module REST
   # Response holds a HTTP response
   class Response
     # These codes are used to define convenience boolean accessors on the response object.

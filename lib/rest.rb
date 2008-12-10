@@ -36,7 +36,7 @@ module REST
   #
   #   response = REST.delete('http://example.com/pigeons/12')
   #   if response.ok?
-  #     puts "Your pigeon exists!"
+  #     puts "Your pigeon died ): )"
   #   elsif response.found?
   #     puts "Someone moved your pigeon!"
   #   else

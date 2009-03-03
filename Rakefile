@@ -28,3 +28,11 @@ namespace :documentation do
     rd.options << "--all" << "--charset" << "utf-8"
   end
 end
+
+begin
+  require 'jewelry_portfolio/tasks'
+  JewelryPortfolio::Tasks.new do |t|
+    t.account     = 'Fingertips'
+  end
+rescue LoadError
+end

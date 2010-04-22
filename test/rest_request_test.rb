@@ -14,6 +14,16 @@ describe "A REST Request" do
     request = REST::Request.new(:get, URI.parse('http://example.com/resources/1'))
     response = request.perform
     
+    request.request.path.should == '/resources/1'
+    response.status_code.should == 200
+    response.body.should == 'It works!'
+  end
+  
+  it "should GET a resource including a query" do
+    request = REST::Request.new(:get, URI.parse('http://example.com/resources?q=first'))
+    response = request.perform
+    
+    request.request.path.should == '/resources?q=first'
     response.status_code.should == 200
     response.body.should == 'It works!'
   end

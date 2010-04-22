@@ -40,20 +40,25 @@ module REST
       @options = options
     end
     
+    # Returns the path (including the query) for the request
+    def path
+      [url.path, url.query].compact.join('?')
+    end
+    
     # Performs the actual request and returns a REST::Response object with the response
     def perform
       case verb
       when :get
-        self.request = Net::HTTP::Get.new(url.path, headers)
+        self.request = Net::HTTP::Get.new(path, headers)
       when :head
-        self.request = Net::HTTP::Head.new(url.path, headers)
+        self.request = Net::HTTP::Head.new(path, headers)
       when :delete
-        self.request = Net::HTTP::Delete.new(url.path, headers)
+        self.request = Net::HTTP::Delete.new(path, headers)
       when :put
-        self.request = Net::HTTP::Put.new(url.path, headers)
+        self.request = Net::HTTP::Put.new(path, headers)
         self.request.body = body
       when :post
-        self.request = Net::HTTP::Post.new(url.path, headers)
+        self.request = Net::HTTP::Post.new(path, headers)
         self.request.body = body
       else
         raise ArgumentError, "Unknown HTTP verb `#{verb}'"

@@ -130,6 +130,16 @@ describe "A REST Request" do
     http_request.key.to_s.should == expected.to_s
   end
   
+  it "should set the TLS CA file to the underlying request object when passed" do
+    http_request = Net::HTTP.new('example.com')
+    Net::HTTP.expects(:new).returns(http_request)
+    
+    request = REST::Request.new(:get, URI.parse('https://example.com/resources'), '', {}, {:tls_verify => true, :tls_ca_file => file_fixture('recorder-1.pem') })
+    request.perform
+    
+    http_request.ca_file.should == file_fixture('recorder-1.pem')
+  end
+  
   it "should GET a resource from an HTTPS URL" do
     request = REST::Request.new(:get, URI.parse('https://example.com/resources/1'))
     response = request.perform

@@ -13,11 +13,13 @@ module REST
     # * <tt>options</tt>: A hash of additional options
     #   * <tt>username</tt>: Username to use for basic authentication
     #   * <tt>password</tt>: Password to use for basic authentication
-    #   * <tt>verify_ssl/tls_verify</tt>: Verify the server certificate against known CA's
+    #   * <tt>tls_verify/verify_ssl</tt>: Verify the server certificate against known CA's
+    #   * <tt>tls_ca_file</tt>: Use a specific file for CA certificates instead of the built-in one
+    #     this only works when <tt>:tls_verify</tt> is also set.
     #   * <tt>tls_key_file</tt>: The client certificate file to use for this request
     #   * <tt>tls_key</tt>: The client certficate keypair to use for this request
     #
-    # Examples
+    # == Examples
     #
     #   request = REST::Request.new(:get, URI.parse('http://example.com/pigeons/1'))
     #

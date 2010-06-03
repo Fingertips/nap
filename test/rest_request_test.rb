@@ -108,6 +108,28 @@ describe "A REST Request" do
     request.perform
   end
   
+  it "should set TLS key to the underlying request object" do
+    key = OpenSSL::PKey::RSA.new(file_fixture_contents('recorder-1.pem'))
+    
+    http_request = Net::HTTP.new('example.com')
+    http_request.expects(:key=).with(key)
+    Net::HTTP.expects(:new).returns(http_request)
+    
+    request = REST::Request.new(:get, URI.parse('https://example.com/resources'), '', {}, {:tls_key => key })
+    request.perform
+  end
+  
+  it "should set TLS key to the underlying request object when passed a key file" do
+    http_request = Net::HTTP.new('example.com')
+    Net::HTTP.expects(:new).returns(http_request)
+    
+    request = REST::Request.new(:get, URI.parse('https://example.com/resources'), '', {}, {:tls_key_file => file_fixture('recorder-1.pem') })
+    request.perform
+    
+    expected = OpenSSL::PKey::RSA.new(file_fixture_contents('recorder-1.pem'))
+    http_request.key.to_s.should == expected.to_s
+  end
+  
   it "should GET a resource from an HTTPS URL" do
     request = REST::Request.new(:get, URI.parse('https://example.com/resources/1'))
     response = request.perform
@@ -117,7 +139,7 @@ describe "A REST Request" do
   end
   
   it "should raise an argumenterror for unknown verbs" do
-    request = REST::Request.new(:unknown, '')
+    request = REST::Request.new(:unknown, URI.parse(''))
     lambda {
       request.perform
     }.should.raise(ArgumentError)

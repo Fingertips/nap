@@ -2,30 +2,3 @@ PUSH A NEW GEM
 
 rubyforge login
 rubyforge add_release fingertips Nap 'Nap-0.3' nap-0.3.gem
-
-
-it "should set TLS key to the underlying request object" do
-end
-
-it "should set TLS key to the underlying request object" do
-end
-
-http = Net::HTTP.new(appliance.hostname,
-Net::HTTP.https_default_port)
-http.use_ssl = true
-http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-
-File.open("/tmp/controller.pem") do |cert_file|
-  key_data = cert_file.read
-  http.cert = OpenSSL::X509::Certificate.new(key_data)
-  #http.key = OpenSSL::PKey::RSA.new(key_data, nil)
-  logger.info key_data
-end
-
-req = Net::HTTP::Post.new('/policy/upload_and_apply')
-req.set_form_data({
-  'filename'=>@baseline.name,
-  'baseline'=>@baseline.baseline,
-  'description'=>@baseline.description}, ';')
-
-result = http.start {|http| http.request(req)}

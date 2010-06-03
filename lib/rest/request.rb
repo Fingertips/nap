@@ -88,9 +88,9 @@ module REST
         require 'openssl'
         
         http_request.use_ssl = true
+        
         if options[:tls_verify] or options[:verify_ssl]
           if http_request.respond_to?(:enable_post_connection_check=)
-            # raise if certificate does not match host
             http_request.enable_post_connection_check = true
           end
           # from http://curl.haxx.se/ca/cacert.pem
@@ -98,6 +98,14 @@ module REST
           http_request.verify_mode = OpenSSL::SSL::VERIFY_PEER
         else
           http_request.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        end
+        
+        if options[:tls_key_file]
+          options[:tls_key] = OpenSSL::PKey::RSA.new(File.read(options[:tls_key_file]))
+        end
+        
+        if options[:tls_key]
+          http_request.key = options[:tls_key]
         end
       end
       

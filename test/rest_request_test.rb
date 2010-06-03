@@ -108,26 +108,32 @@ describe "A REST Request" do
     request.perform
   end
   
-  it "should set TLS key to the underlying request object" do
+  it "should set TLS key ad certificate to the underlying request object" do
     key = OpenSSL::PKey::RSA.new(file_fixture_contents('recorder-1.pem'))
+    certificate = OpenSSL::X509::Certificate.new(file_fixture_contents('recorder-1.pem'))
     
     http_request = Net::HTTP.new('example.com')
     http_request.expects(:key=).with(key)
     Net::HTTP.expects(:new).returns(http_request)
     
-    request = REST::Request.new(:get, URI.parse('https://example.com/resources'), '', {}, {:tls_key => key })
+    request = REST::Request.new(:get, URI.parse('https://example.com/resources'), '', {}, {
+      :tls_key => key,
+      :tls_certificate => certificate
+    })
     request.perform
   end
   
-  it "should set TLS key to the underlying request object when passed a key file" do
+  it "should set TLS key and certificate to the underlying request object when passed a key file" do
     http_request = Net::HTTP.new('example.com')
     Net::HTTP.expects(:new).returns(http_request)
     
-    request = REST::Request.new(:get, URI.parse('https://example.com/resources'), '', {}, {:tls_key_file => file_fixture('recorder-1.pem') })
+    request = REST::Request.new(:get, URI.parse('https://example.com/resources'), '', {}, {:tls_key_and_certificate_file => file_fixture('recorder-1.pem') })
     request.perform
     
-    expected = OpenSSL::PKey::RSA.new(file_fixture_contents('recorder-1.pem'))
-    http_request.key.to_s.should == expected.to_s
+    expected_key = OpenSSL::PKey::RSA.new(file_fixture_contents('recorder-1.pem'))
+    expected_certificate = OpenSSL::X509::Certificate.new(file_fixture_contents('recorder-1.pem'))
+    http_request.key.to_s.should == expected_key.to_s
+    http_request.cert.to_s.should == expected_certificate.to_s
   end
   
   it "should set the TLS CA file to the underlying request object when passed" do

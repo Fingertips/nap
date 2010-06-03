@@ -1,6 +1,7 @@
 require File.expand_path('../helper', __FILE__)
 require 'rest'
 require 'uri'
+require 'openssl'
 
 describe "A REST Request" do
   before do
@@ -91,6 +92,19 @@ describe "A REST Request" do
   it "should move basic authentication credentials to the underlying request object" do
     request = REST::Request.new(:post, URI.parse('http://example.com/resources'), '', {}, {:username => 'admin', :password => 'secret'})
     Net::HTTP::Post.any_instance.expects(:basic_auth).with('admin', 'secret')
+    request.perform
+  end
+  
+  it "should set the proper attributes for checking the server certificate during a TLS connection" do
+    http_request = Net::HTTP.new('example.com')
+    if http_request.respond_to?(:enable_post_connection_check=)
+      http_request.expects(:enable_post_connection_check=).with(true)
+    end
+    http_request.expects(:ca_file=).with(File.expand_path('../../support/cacert.pem', __FILE__))
+    http_request.expects(:verify_mode=).with(OpenSSL::SSL::VERIFY_PEER)
+    Net::HTTP.expects(:new).returns(http_request)
+    
+    request = REST::Request.new(:get, URI.parse('https://example.com/resources'), '', {}, {:tls_verify => true})
     request.perform
   end
   

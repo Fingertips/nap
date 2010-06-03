@@ -13,6 +13,9 @@ module REST
     # * <tt>options</tt>: A hash of additional options
     #   * <tt>username</tt>: Username to use for basic authentication
     #   * <tt>password</tt>: Password to use for basic authentication
+    #   * <tt>verify_ssl/tls_verify</tt>: Verify the server certificate against known CA's
+    #   * <tt>tls_key_file</tt>: The client certificate file to use for this request
+    #   * <tt>tls_key</tt>: The client certficate keypair to use for this request
     #
     # Examples
     #
@@ -32,6 +35,15 @@ module REST
     #     {'Accept' => 'application/json, */*', 'Content-Type' => 'application/json; charset=utf-8'},
     #     {:username => 'Admin', :password => 'secret'}
     #   )
+    #
+    #   request = REST::Request.new(:get, URI.parse('http://example.com/pigeons/1'), {}, {}, {
+    #     :key => OpenSSL::PKey::RSA.new(File.read('/home/alice/keys/example.pem'))
+    #   })
+    #
+    #   request = REST::Request.new(:get, URI.parse('http://example.com/pigeons/1'), {}, {}, {
+    #     :tls_verify => true,
+    #     :tls_key_file => '/home/alice/keys/example.pem'
+    #   })
     def initialize(verb, url, body=nil, headers={}, options={})
       @verb = verb
       @url = url
@@ -71,25 +83,25 @@ module REST
       http_request = Net::HTTP.new(url.host, url.port)
       
       # enable SSL/TLS
-      if url.scheme == "https"
+      if url.scheme == 'https'
         require 'net/https'
+        require 'openssl'
+        
         http_request.use_ssl = true
-        
-        if options[:verify_ssl]
-          verify_mode = OpenSSL::SSL::VERIFY_PEER
-          # raise if certificate does not match host
-          http_request.enable_post_connection_check = true
-
+        if options[:tls_verify] or options[:verify_ssl]
+          if http_request.respond_to?(:enable_post_connection_check=)
+            # raise if certificate does not match host
+            http_request.enable_post_connection_check = true
+          end
           # from http://curl.haxx.se/ca/cacert.pem
-          http_request.ca_file = File.join(File.dirname(__FILE__), "/../../support/cacert.pem")
+          http_request.ca_file = File.join(File.expand_path('../../../support/cacert.pem', __FILE__))
+          http_request.verify_mode = OpenSSL::SSL::VERIFY_PEER
         else
-          verify_mode = OpenSSL::SSL::VERIFY_NONE
+          http_request.verify_mode = OpenSSL::SSL::VERIFY_NONE
         end
-        
-        http_request.verify_mode = verify_mode
       end
       
-      response = http_request.start {|http| http.request(request) }
+      response = http_request.start { |http| http.request(request) }
       REST::Response.new(response.code, response.instance_variable_get('@header'), response.body)
     end
     

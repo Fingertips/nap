@@ -154,7 +154,7 @@ describe "A REST Request" do
     response.body.should == 'It works!'
   end
   
-  it "should raise an argumenterror for unknown verbs" do
+  it "should raise an argument error for unknown verbs" do
     request = REST::Request.new(:unknown, URI.parse(''))
     lambda {
       request.perform

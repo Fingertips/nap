@@ -1,8 +1,10 @@
 TEST_ROOT = File.expand_path('../', __FILE__)
-
 $:.unshift File.expand_path('../lib', TEST_ROOT)
 
-require 'rubygems' rescue LoadError
+begin
+  require 'rubygems'
+rescue
+end
 
 require 'test/spec'
 require 'mocha'

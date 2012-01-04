@@ -17,7 +17,7 @@ if pid.nil? then
 else
   require 'rest'
 
-  describe "A REST Request" do
+  describe "A remote REST Request" do
     BASE_URL = 'http://localhost:32776'
 
     it "returns the body of the response" do

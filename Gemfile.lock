@@ -1,0 +1,19 @@
+PATH
+  remote: .
+  specs:
+    nap (0.4)
+
+GEM
+  specs:
+    metaclass (0.0.1)
+    mocha (0.10.0)
+      metaclass (~> 0.0.1)
+    test-spec (0.10.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  mocha
+  nap!
+  test-spec

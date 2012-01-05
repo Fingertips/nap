@@ -130,7 +130,11 @@ module REST
         end
       end
       
-      response = http_request.start { |http| http.request(request) }
+      begin
+        response = http_request.start { |http| http.request(request) }
+      rescue EOFError => error
+        raise REST::DisconnectedError, error.message
+      end
       REST::Response.new(response.code, response.instance_variable_get('@header'), response.body)
     end
     

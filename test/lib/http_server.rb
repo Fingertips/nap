@@ -40,6 +40,8 @@ class Webserver
             case path
             when '/'
               response(client, :ok, 'OK!')
+            when '/disconnect'
+              client.close
             else
               response(client, :not_found, "Unknown path: #{path}")
             end

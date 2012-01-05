@@ -3,6 +3,9 @@ require 'uri'
 # REST is basically a convenience wrapper around Net::HTTP. It defines a simple and consistant API for doing REST-style
 # HTTP calls.
 module REST
+  # Raised when the remote server disconnects when reading the response
+  class DisconnectedError < StandardError; end
+  
   # Performs a HEAD on a resource. See REST::Request.new for a complete discussion of options.
   #
   #   response = REST.get('http://example.com/pigeons/12',

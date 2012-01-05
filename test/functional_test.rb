@@ -28,5 +28,15 @@ else
       response = REST.get(BASE_URL + '/')
       response.body.should == "OK!\n"
     end
+
+    it "does stuff when the server disconnects" do
+      begin
+        REST.get(BASE_URL + '/disconnect')
+      rescue REST::DisconnectedError => e
+        e.message.should == 'end of file reached'
+      else
+        fail
+      end
+    end
   end
 end

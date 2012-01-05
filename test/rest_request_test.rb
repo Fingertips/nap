@@ -160,4 +160,13 @@ describe "A REST Request" do
       request.perform
     }.should.raise(ArgumentError)
   end
+  
+  it "should raise a disconnect errro when the reading the response fails" do
+    http_request = Net::HTTP.new('example.com')
+    Net::HTTP.expects(:new).returns(http_request)
+    http_request.expects(:start).raises(EOFError.new('failed'))
+    lambda {
+      REST.get('/something')
+    }.should.raise(REST::DisconnectedError)
+  end
 end

@@ -20,13 +20,13 @@ else
   describe "A remote REST Request" do
     BASE_URL = 'http://localhost:32776'
 
+    after(:all) do
+      Process.kill('SIGKILL', pid)
+    end
+
     it "returns the body of the response" do
       response = REST.get(BASE_URL + '/')
       response.body.should == "OK!\n"
-    end
-
-    it "shuts down the server" do
-      Process.kill('SIGKILL', pid)
     end
   end
 end

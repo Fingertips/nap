@@ -3,7 +3,7 @@ ignore(/^(html|tmp|support)/)
 
 recipe :ruby
 
-class Ruby
+class Kicker::Recipes::Ruby
   def self.is_test_file?(path)
     path if File.exist?(File.expand_path("../#{path}", __FILE__))
   end
@@ -16,13 +16,12 @@ process do |files|
   end
 end
 
-recipe :ruby
 process do |files|
-  Ruby.run_tests(files.take_and_map do |file|
+  Kicker::Recipes::Ruby.run_tests(files.take_and_map do |file|
     case file
     when %r{^lib/(.+)\.rb$}
       path = $1.gsub('/', '_')
-      Ruby.is_test_file?("test/#{path}_test.rb")
+      Kicker::Recipes::Ruby.is_test_file?("test/#{path}_test.rb")
     end
   end)
 end

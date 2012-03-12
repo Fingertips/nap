@@ -178,16 +178,18 @@ describe "A REST Request" do
     request.http_proxy.should. == 'http://localhost'
     ENV.delete('HTTP_PROXY')
     
-    ENV['http_proxy'] = 'http://192.168.0.1'
-    request.http_proxy.should. == 'http://192.168.0.1'
+    ENV['http_proxy'] = 'http://rob:secret@192.168.0.1:21'
+    request.http_proxy.should. == 'http://rob:secret@192.168.0.1:21'
     ENV.delete('http_proxy')
   end
   
   it "parses the http proxy settings" do
     request = REST::Request.new(:get, URI.parse(''))
-    request.stubs(:http_proxy).returns('http://192.168.0.1:80')
+    request.stubs(:http_proxy).returns('http://rob:secret@192.168.0.1:21')
     request.proxy_settings.host.should == '192.168.0.1'
-    request.proxy_settings.port.should == 80
+    request.proxy_settings.port.should == 21
+    request.proxy_settings.user.should == 'rob'
+    request.proxy_settings.password.should == 'secret'
   end
   
   it "should use a proxy when the http_proxy" do

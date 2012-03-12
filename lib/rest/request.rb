@@ -82,7 +82,7 @@ module REST
     end
     
     def proxy
-      @proxy ||= Net::HTTP.Proxy(proxy_settings.host, proxy_settings.port)
+      @proxy ||= Net::HTTP.Proxy(proxy_settings.host, proxy_settings.port, proxy_settings.user, proxy_settings.password)
     end
     
     def http_request

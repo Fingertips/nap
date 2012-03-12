@@ -169,4 +169,34 @@ describe "A REST Request" do
       REST.get('/something')
     }.should.raise(REST::DisconnectedError)
   end
+  
+  it "should find proxy settings from the environment" do
+    request = REST::Request.new(:get, URI.parse(''))
+    request.http_proxy.should.be.nil
+    
+    ENV['HTTP_PROXY'] = 'http://localhost'
+    request.http_proxy.should. == 'http://localhost'
+    ENV.delete('HTTP_PROXY')
+    
+    ENV['http_proxy'] = 'http://192.168.0.1'
+    request.http_proxy.should. == 'http://192.168.0.1'
+    ENV.delete('http_proxy')
+  end
+  
+  it "parses the http proxy settings" do
+    request = REST::Request.new(:get, URI.parse(''))
+    request.stubs(:http_proxy).returns('http://192.168.0.1:80')
+    request.proxy_settings.host.should == '192.168.0.1'
+    request.proxy_settings.port.should == 80
+  end
+  
+  it "should use a proxy when the http_proxy" do
+    request = REST::Request.new(:get, URI.parse(''))
+    request.http_request.should.be.kind_of?(Net::HTTP)
+    request.http_request.proxy_address.should.be.nil
+    
+    request.stubs(:http_proxy).returns('http://192.168.0.1:80')
+    request.http_request.should.be.kind_of?(Net::HTTP)
+    request.http_request.proxy_address.should == '192.168.0.1'
+  end
 end

@@ -73,6 +73,26 @@ module REST
       [url.path, url.query].compact.join('?')
     end
     
+    def http_proxy
+      ENV['HTTP_PROXY'] || ENV['http_proxy']
+    end
+    
+    def proxy_settings
+      http_proxy ? URI.parse(http_proxy) : nil
+    end
+    
+    def proxy
+      @proxy ||= Net::HTTP.Proxy(proxy_settings.host, proxy_settings.port)
+    end
+    
+    def http_request
+      if proxy_settings
+        proxy.new(url.host, url.port)
+      else
+        Net::HTTP.new(url.host, url.port)
+      end
+    end
+    
     # Performs the actual request and returns a REST::Response object with the response
     def perform
       case verb
@@ -95,8 +115,8 @@ module REST
       if options[:username] and options[:password]
         request.basic_auth(options[:username], options[:password])
       end
-            
-      http_request = Net::HTTP.new(url.host, url.port)
+      
+      http_request = http_request()
       
       # enable SSL/TLS
       if url.scheme == 'https'

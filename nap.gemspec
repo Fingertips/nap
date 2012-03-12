@@ -16,7 +16,7 @@ Gem::Specification.new do |spec|
   spec.files = ['lib/rest.rb', 'lib/rest/request.rb', 'lib/rest/response.rb', 'support/cacert.pem']
 
   spec.has_rdoc = true
-  spec.extra_rdoc_files = ['README', 'LICENSE']
+  spec.extra_rdoc_files = ['README.md', 'LICENSE']
   spec.rdoc_options << "--charset=utf-8"
 
   spec.add_development_dependency('rake')

@@ -170,34 +170,84 @@ describe "A REST Request" do
     }.should.raise(REST::DisconnectedError)
   end
   
-  it "should find proxy settings from the environment" do
+  it "should find http proxy settings from the environment" do
     request = REST::Request.new(:get, URI.parse(''))
     request.http_proxy.should.be.nil
     
     ENV['HTTP_PROXY'] = 'http://localhost'
-    request.http_proxy.should. == 'http://localhost'
+    request.proxy_env['http'].should. == 'http://localhost'
     ENV.delete('HTTP_PROXY')
     
     ENV['http_proxy'] = 'http://rob:secret@192.168.0.1:21'
-    request.http_proxy.should. == 'http://rob:secret@192.168.0.1:21'
+    request.proxy_env['http'].should. == 'http://rob:secret@192.168.0.1:21'
     ENV.delete('http_proxy')
   end
   
-  it "parses the http proxy settings" do
+  it "should find https proxy settings from the environment" do
     request = REST::Request.new(:get, URI.parse(''))
-    request.stubs(:http_proxy).returns('http://rob:secret@192.168.0.1:21')
+    request.proxy_settings.should.be.nil
+    
+    ENV['HTTPS_PROXY'] = 'http://localhost'
+    request.proxy_env['https'].should. == 'http://localhost'
+    ENV.delete('HTTPS_PROXY')
+    
+    ENV['https_proxy'] = 'http://rob:secret@192.168.0.1:21'
+    request.proxy_env['https'].should. == 'http://rob:secret@192.168.0.1:21'
+    ENV.delete('https_proxy')
+  end
+  
+  it "parses the http proxy settings" do
+    request = REST::Request.new(:get, URI.parse('http://example.com'))
+    request.stubs(:proxy_env).returns({'http' => 'http://rob:secret@192.168.0.1:21'})
     request.proxy_settings.host.should == '192.168.0.1'
     request.proxy_settings.port.should == 21
     request.proxy_settings.user.should == 'rob'
     request.proxy_settings.password.should == 'secret'
   end
   
-  it "should use a proxy when the http_proxy" do
-    request = REST::Request.new(:get, URI.parse(''))
+  it "parses the https proxy settings" do
+    request = REST::Request.new(:get, URI.parse('https://example.com'))
+    request.stubs(:proxy_env).returns({'https' => 'http://rob:secret@192.168.0.1:21'})
+    request.proxy_settings.host.should == '192.168.0.1'
+    request.proxy_settings.port.should == 21
+    request.proxy_settings.user.should == 'rob'
+    request.proxy_settings.password.should == 'secret'
+  end
+  
+  it "does not return a proxy for any scheme when nothing is configured" do
+    request = REST::Request.new(:get, URI.parse('http://example.com/heya'))
+    request.http_proxy.should.be.nil
+  end
+  
+  it "does not return a proxy object when a specific scheme is not configured" do
+    request = REST::Request.new(:get, URI.parse('https://example.com/heya'))
+    request.stubs(:proxy_env).returns({'http' => 'http://rob:secret@192.168.0.1:21'})
+    request.http_proxy.should.be.nil
+  end
+  
+  it "returns a proxy object when the specific scheme is configured" do
+    env = {
+      'http'  => 'http://192.168.0.1:80',
+      'https' => 'http://192.168.0.2:80'
+    }
+    request = REST::Request.new(:get, URI.parse('http://example.com/heya'))
+    request.stubs(:proxy_env).returns(env)
+    request.http_proxy.proxy_address.should == '192.168.0.1'
+    
+    request = REST::Request.new(:get, URI.parse('https://example.com/heya'))
+    request.stubs(:proxy_env).returns(env)
+    request.http_proxy.proxy_address.should == '192.168.0.2'
+  end
+  
+  it "uses the proxy instead of a regular request object when a proxy is configured" do
+    request = REST::Request.new(:get, URI.parse('http://example.com/heya'))
     request.http_request.should.be.kind_of?(Net::HTTP)
     request.http_request.proxy_address.should.be.nil
     
-    request.stubs(:http_proxy).returns('http://192.168.0.1:80')
+    request.stubs(:proxy_env).returns({
+      'http'  => 'http://192.168.0.1:80',
+      'https' => 'http://192.168.0.1:80'
+    })
     request.http_request.should.be.kind_of?(Net::HTTP)
     request.http_request.proxy_address.should == '192.168.0.1'
   end

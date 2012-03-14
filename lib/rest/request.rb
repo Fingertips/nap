@@ -73,21 +73,26 @@ module REST
       [url.path, url.query].compact.join('?')
     end
     
-    def http_proxy
-      ENV['HTTP_PROXY'] || ENV['http_proxy']
+    def proxy_env
+      {
+        'http'  => ENV['HTTP_PROXY']  || ENV['http_proxy'],
+        'https' => ENV['HTTPS_PROXY'] || ENV['https_proxy']
+      }
     end
     
     def proxy_settings
-      http_proxy ? URI.parse(http_proxy) : nil
+      proxy_env[url.scheme] ? URI.parse(proxy_env[url.scheme]) : nil
     end
     
-    def proxy
-      @proxy ||= Net::HTTP.Proxy(proxy_settings.host, proxy_settings.port, proxy_settings.user, proxy_settings.password)
+    def http_proxy
+      if settings = proxy_settings
+        Net::HTTP.Proxy(settings.host, settings.port, settings.user, settings.password)
+      end
     end
     
     def http_request
-      if proxy_settings
-        proxy.new(url.host, url.port)
+      if http_proxy
+        http_proxy.new(url.host, url.port)
       else
         Net::HTTP.new(url.host, url.port)
       end

@@ -6,7 +6,7 @@ module REST
   # Raised when the remote server disconnects when reading the response
   class DisconnectedError < StandardError; end
   
-  # Performs a HEAD on a resource. See REST::Request.new for a complete discussion of options.
+  # Performs a GET on a resource. See REST::Request.new for a complete discussion of options.
   #
   #   response = REST.get('http://example.com/pigeons/12',
   #     {'Accept' => 'text/plain'},

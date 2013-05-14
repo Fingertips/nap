@@ -20,6 +20,11 @@ Gem::Specification.new do |spec|
   spec.rdoc_options << "--charset=utf-8"
 
   spec.add_development_dependency('rake')
-  spec.add_development_dependency('test-spec')
-  spec.add_development_dependency('mocha')
+
+  if RUBY_VERSION > "2.0"
+    spec.add_development_dependency('peck')
+  else
+    spec.add_development_dependency('test-spec')
+    spec.add_development_dependency('mocha')
+  end
 end

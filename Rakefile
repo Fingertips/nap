@@ -29,13 +29,10 @@ namespace :gem do
   end
 end
 
-# Nobody likes winey errors without a proper solution
-stderr = $stderr
-$stderr = File.open('/dev/null', 'w')
 begin
+  require 'rdoc/task'
+rescue LoadError
   require 'rake/rdoctask'
-ensure
-  $stderr = stderr
 end
 
 namespace :documentation do

@@ -135,7 +135,7 @@ module REST
             http_request.enable_post_connection_check = true
           end
           # from http://curl.haxx.se/ca/cacert.pem
-          http_request.ca_file = options[:tls_ca_file] || File.join(File.expand_path('../../../support/cacert.pem', __FILE__))
+          http_request.ca_file = options[:tls_ca_file] || File.expand_path('../../../support/cacert.pem', __FILE__)
           http_request.verify_mode = OpenSSL::SSL::VERIFY_PEER
         else
           http_request.verify_mode = OpenSSL::SSL::VERIFY_NONE

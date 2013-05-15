@@ -26,8 +26,8 @@ class Webserver
   
   def run
     server = TCPServer.new(PORT)
+    puts "Webserver running on #{PORT}"
     loop do
-      puts "Webserver running on #{PORT}"
       Thread.start(server.accept) do |client|
         begin
           request_line = client.gets
@@ -54,6 +54,7 @@ class Webserver
         client.close
       end
     end
+    puts "Webserver shutting down"
   end
   
   def log(message)

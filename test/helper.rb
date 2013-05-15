@@ -17,7 +17,7 @@ require 'rest_mock'
 require 'file_fixtures'
 
 require 'peck/flavors/vanilla'
-  
+
 # The once block is ran once when the context is initialized
 Peck::Context.once do |context|
   include Test::FileFixtures

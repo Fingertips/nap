@@ -7,6 +7,8 @@ if pid.nil?
 else
   require 'rest'
   
+  require 'rubygems' if RUBY_VERSION < '1.9.0'
+  
   require 'peck'
   require 'peck/delegates'
   require 'peck/counter'

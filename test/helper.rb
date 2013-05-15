@@ -4,7 +4,7 @@ $:.unshift File.expand_path('../lib', TEST_ROOT)
 require 'rest'
 
 # I'm truly sorry ):
-require 'rubygems'
+require 'rubygems' if RUBY_VERSION < '1.9.0'
 require 'bundler/setup'
 
 require 'tmpdir'

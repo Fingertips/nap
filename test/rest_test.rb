@@ -1,31 +1,42 @@
 require File.expand_path('../helper', __FILE__)
-require 'rest'
-require 'uri'
 
 describe "REST" do
+  before do
+    http_response = Net::HTTPOK.new('1.1', '200', 'OK')
+    http_response.read_body = 'It works!'
+    http_response.add_field('Content-type', 'text/html')
+    Net::HTTP.start_returns = http_response
+  end
+  
   it "should GET a resource" do
     uri = 'http://example.com/resources/1'
-    REST::Request.expects(:perform).with(:get, URI.parse(uri), nil, {}, {})
     REST.get(uri)
+    REST::Request._performed.last.should == [:get, URI.parse(uri), nil, {}, {}]
   end
   
   it "should HEAD a resource" do
     uri = 'http://example.com/resources/1'
-    REST::Request.expects(:perform).with(:head, URI.parse(uri), nil, {}, {})
     REST.head(uri)
+    REST::Request._performed.last.should == [:head, URI.parse(uri), nil, {}, {}]
+  end
+  
+  it "should DELETE a resource" do
+    uri = 'http://example.com/resources/1'
+    REST.delete(uri)
+    REST::Request._performed.last.should == [:delete, URI.parse(uri), nil, {}, {}]
   end
   
   it "should PUT a resource" do
     uri = 'http://example.com/resources/1'
     body = 'name=Manfred'
-    REST::Request.expects(:perform).with(:put, URI.parse(uri), body, {}, {})
     REST.put(uri, body)
+    REST::Request._performed.last.should == [:put, URI.parse(uri), body, {}, {}]
   end
   
   it "should POST a resource" do
     uri = 'http://example.com/resources'
     body = 'name=Manfred'
-    REST::Request.expects(:perform).with(:post, URI.parse(uri), body, {}, {})
     REST.post(uri, body)
+    REST::Request._performed.last.should == [:post, URI.parse(uri), body, {}, {}]
   end
 end

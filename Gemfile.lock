@@ -3,7 +3,6 @@ GEM
   specs:
     peck (0.2.0)
     rake (10.0.4)
-    test-spec (0.10.0)
 
 PLATFORMS
   ruby
@@ -11,4 +10,3 @@ PLATFORMS
 DEPENDENCIES
   peck
   rake
-  test-spec

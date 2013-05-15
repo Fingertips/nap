@@ -16,30 +16,22 @@ require 'http_mock'
 require 'rest_mock'
 require 'file_fixtures'
 
-if RUBY_VERSION < "2.0.0"
-  require 'test/spec'
+require 'peck/flavors/vanilla'
   
-  module Test::Spec::TestCase::InstanceMethods
-    include Test::FileFixtures
-  end
-else
-  require 'peck/flavors/vanilla'
+# The once block is ran once when the context is initialized
+Peck::Context.once do |context|
+  include Test::FileFixtures
   
-  # The once block is ran once when the context is initialized
-  Peck::Context.once do |context|
-    include Test::FileFixtures
+  def with_env(env)
+    unless (ENV.keys & env.keys).empty?
+      raise ArgumentError, "You can't shadow existing environment variables"
+    end
     
-    def with_env(env)
-      unless (ENV.keys & env.keys).empty?
-        raise ArgumentError, "You can't shadow existing environment variables"
-      end
-      
-      begin
-        env.each { |variable, value| ENV[variable] = value }
-        yield
-      ensure
-        env.each { |variable, value| ENV.delete(variable) }
-      end
+    begin
+      env.each { |variable, value| ENV[variable] = value }
+      yield
+    ensure
+      env.each { |variable, value| ENV.delete(variable) }
     end
   end
 end

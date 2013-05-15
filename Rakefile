@@ -32,13 +32,19 @@ end
 begin
   require 'rdoc/task'
 rescue LoadError
-  require 'rake/rdoctask'
 end
 
-namespace :documentation do
-  Rake::RDocTask.new(:generate) do |rd|
-    rd.main = "README"
-    rd.rdoc_files.include("README", "LICENSE", "lib/**/*.rb")
-    rd.options << "--all" << "--charset" << "utf-8"
+begin
+  require 'rake/rdoctask'
+rescue
+end
+
+if defined?(Rake::RDocTask)
+  namespace :documentation do
+    Rake::RDocTask.new(:generate) do |rd|
+      rd.main = "README"
+      rd.rdoc_files.include("README", "LICENSE", "lib/**/*.rb")
+      rd.options << "--all" << "--charset" << "utf-8"
+    end
   end
 end

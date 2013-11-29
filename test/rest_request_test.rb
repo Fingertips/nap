@@ -42,6 +42,17 @@ describe "A REST Request" do
     response.status_code.should == 200
   end
   
+  it "should PATCH a resource" do
+    body = 'name=Manfred'
+    request = REST::Request.new(:put, URI.parse('http://example.com/resources/1'), body)
+    
+    response = request.perform
+    request.request.body.should == body
+    
+    response.status_code.should == 200
+    response.body.should == 'It works!'
+  end
+  
   it "should PUT a resource" do
     body = 'name=Manfred'
     request = REST::Request.new(:put, URI.parse('http://example.com/resources/1'), body)

@@ -30,7 +30,7 @@ module REST
   #     puts "Someone moved your pigeon!"
   #   else
   #     puts "Couldn't fetch your pigeon (#{response.status_code})"
-  #   end  
+  #   end
   def self.head(uri, headers={}, options={})
     REST::Request.perform(:head, URI.parse(uri), nil, headers, options)
   end
@@ -44,9 +44,25 @@ module REST
   #     puts "Someone moved your pigeon!"
   #   else
   #     puts "Couldn't delete your pigeon (#{response.status_code})"
-  #   end  
+  #   end
   def self.delete(uri, headers={}, options={})
     REST::Request.perform(:delete, URI.parse(uri), nil, headers, options)
+  end
+  
+  # Performs a PATCH on a resource. See REST::Request.new for a complete discussion of options.
+  #
+  #   response = REST.patch('http://example.com/pigeons/12',
+  #     {'Name' => 'Homer'}.to_xml,
+  #     {'Accept' => 'application/xml, */*', 'Content-Type' => 'application/xml'}
+  #   )
+  #   if response.ok?
+  #     puts "Your pigeon was renamed to 'Homer'!"
+  #   else
+  #     puts "Couldn't rename your pigeon (#{response.status_code})"
+  #     puts XML.parse(response.body).reason
+  #   end
+  def self.patch(uri, body, headers={}, options={})
+    REST::Request.perform(:patch, URI.parse(uri), body, headers, options)
   end
   
   # Performs a PUT on a resource. See REST::Request.new for a complete discussion of options.
@@ -56,11 +72,11 @@ module REST
   #     {'Accept' => 'application/xml, */*', 'Content-Type' => 'application/xml'}
   #   )
   #   if response.ok?
-  #     puts "Your pigeon was renamed to 'Homer'!"
+  #     puts "Your pigeon 'Bowser' was replaced by 'Homer'!"
   #   else
-  #     puts "Couldn't rename your pigeon (#{response.status_code})"
+  #     puts "Couldn't replace your pigeon (#{response.status_code})"
   #     puts XML.parse(response.body).reason
-  #   end  
+  #   end
   def self.put(uri, body, headers={}, options={})
     REST::Request.perform(:put, URI.parse(uri), body, headers, options)
   end

@@ -6,7 +6,7 @@ module REST
   class Request
     attr_accessor :verb, :url, :body, :headers, :options, :request
     
-    # * <tt>verb</tt>: The verb to use in the request, either :get, :head, :put, or :post
+    # * <tt>verb</tt>: The verb to use in the request, either :get, :head, :patch, :put, or :post
     # * <tt>url</tt>: The URL to send the request to, must be a URI instance
     # * <tt>body</tt>: The body to use in the request
     # * <tt>headers</tt>: A hash of headers to add to the request
@@ -107,6 +107,9 @@ module REST
         self.request = Net::HTTP::Head.new(path, headers)
       when :delete
         self.request = Net::HTTP::Delete.new(path, headers)
+      when :patch
+        self.request = Net::HTTP::Patch.new(path, headers)
+        self.request.body = body
       when :put
         self.request = Net::HTTP::Put.new(path, headers)
         self.request.body = body

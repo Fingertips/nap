@@ -118,7 +118,7 @@ describe "A REST Request" do
     http_request.verify_mode.should == OpenSSL::SSL::VERIFY_PEER
   end
   
-  it "should set TLS key ad certificate to the underlying request object" do
+  it "should set TLS key and certificate to the underlying request object" do
     key = OpenSSL::PKey::RSA.new(file_fixture_contents('recorder-1.pem'))
     certificate = OpenSSL::X509::Certificate.new(file_fixture_contents('recorder-1.pem'))
     
@@ -261,5 +261,16 @@ describe "A REST Request" do
       request.http_request.should.be.kind_of?(Net::HTTP)
       request.http_request.proxy_address.should == '192.168.0.1'
     end
+  end
+
+  it "yields the underlying Net::HTTP request object for additional configuration" do
+    yielded_http_request = nil
+
+    REST::Request.new(:get, URI.parse('http://example.com/heya')) do |http_request|
+      yielded_http_request = http_request
+    end.perform
+
+    http_request = REST::Request._last_http_request
+    http_request.should == yielded_http_request
   end
 end

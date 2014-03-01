@@ -17,8 +17,8 @@ module REST
   #   else
   #     puts "Couldn't fetch your pigeon (#{response.status_code})"
   #   end
-  def self.get(uri, headers={}, options={})
-    REST::Request.perform(:get, URI.parse(uri), nil, headers, options)
+  def self.get(uri, headers={}, options={}, &configure_block)
+    REST::Request.perform(:get, URI.parse(uri), nil, headers, options, &configure_block)
   end
   
   # Performs a HEAD on a resource. See REST::Request.new for a complete discussion of options.
@@ -31,8 +31,8 @@ module REST
   #   else
   #     puts "Couldn't fetch your pigeon (#{response.status_code})"
   #   end
-  def self.head(uri, headers={}, options={})
-    REST::Request.perform(:head, URI.parse(uri), nil, headers, options)
+  def self.head(uri, headers={}, options={}, &configure_block)
+    REST::Request.perform(:head, URI.parse(uri), nil, headers, options, &configure_block)
   end
 
   # Performs a DELETE on a resource. See REST::Request.new for a complete discussion of options.
@@ -45,8 +45,8 @@ module REST
   #   else
   #     puts "Couldn't delete your pigeon (#{response.status_code})"
   #   end
-  def self.delete(uri, headers={}, options={})
-    REST::Request.perform(:delete, URI.parse(uri), nil, headers, options)
+  def self.delete(uri, headers={}, options={}, &configure_block)
+    REST::Request.perform(:delete, URI.parse(uri), nil, headers, options, &configure_block)
   end
   
   # Performs a PATCH on a resource. See REST::Request.new for a complete discussion of options.
@@ -61,8 +61,8 @@ module REST
   #     puts "Couldn't rename your pigeon (#{response.status_code})"
   #     puts XML.parse(response.body).reason
   #   end
-  def self.patch(uri, body, headers={}, options={})
-    REST::Request.perform(:patch, URI.parse(uri), body, headers, options)
+  def self.patch(uri, body, headers={}, options={}, &configure_block)
+    REST::Request.perform(:patch, URI.parse(uri), body, headers, options, &configure_block)
   end
   
   # Performs a PUT on a resource. See REST::Request.new for a complete discussion of options.
@@ -77,8 +77,8 @@ module REST
   #     puts "Couldn't replace your pigeon (#{response.status_code})"
   #     puts XML.parse(response.body).reason
   #   end
-  def self.put(uri, body, headers={}, options={})
-    REST::Request.perform(:put, URI.parse(uri), body, headers, options)
+  def self.put(uri, body, headers={}, options={}, &configure_block)
+    REST::Request.perform(:put, URI.parse(uri), body, headers, options, &configure_block)
   end
   
   # Performs a POST on a resource. See REST::Request.new for a complete discussion of options.
@@ -93,8 +93,8 @@ module REST
   #     puts "Couldn't create your pigeon (#{response.status_code})"
   #     puts XML.parse(response.body).reason
   #   end
-  def self.post(uri, body, headers={}, options={})
-    REST::Request.perform(:post, URI.parse(uri), body, headers, options)
+  def self.post(uri, body, headers={}, options={}, &configure_block)
+    REST::Request.perform(:post, URI.parse(uri), body, headers, options, &configure_block)
   end
 end
 

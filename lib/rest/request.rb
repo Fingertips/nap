@@ -16,9 +16,12 @@ module REST
     #   * <tt>tls_verify/verify_ssl</tt>: Verify the server certificate against known CA's
     #   * <tt>tls_ca_file</tt>: Use a specific file for CA certificates instead of the built-in one
     #     this only works when <tt>:tls_verify</tt> is also set.
-    #   * <tt>tls_key_and_certificate_file</tt>: The client key and certificate file to use for this request
+    #   * <tt>tls_key_and_certificate_file</tt>: The client key and certificate file to use for this
+    #     request
     #   * <tt>tls_certificate</tt>: The client certficate to use for this request
     #   * <tt>tls_key</tt>: The client private key to use for this request
+    # * <tt>configure_block</tt>: An optional block that yields the underlying <tt>Net::HTTP</tt>
+    #   request object allowing for more fine-grained configuration
     #
     # == Examples
     #
@@ -60,12 +63,13 @@ module REST
     #     :tls_verify => true,
     #     :tls_ca_file => '/home/alice/keys/example.pem'
     #   })
-    def initialize(verb, url, body=nil, headers={}, options={})
+    def initialize(verb, url, body=nil, headers={}, options={}, &configure_block)
       @verb = verb
       @url = url
       @body = body
       @headers = headers
       @options = options
+      @configure_block = configure_block
     end
     
     # Returns the path (including the query) for the request
@@ -158,6 +162,10 @@ module REST
         end
       end
       
+      if @configure_block
+        @configure_block.call(http_request)
+      end
+      
       begin
         response = http_request.start { |http| http.request(request) }
       rescue EOFError => error
@@ -169,9 +177,10 @@ module REST
     # Shortcut for REST::Request.new(*args).perform.
     #
     # See new for options.
-    def self.perform(*args)
-      request = new(*args)
+    def self.perform(*args, &configure_block)
+      request = new(*args, &configure_block)
       request.perform
     end
   end
 end
+

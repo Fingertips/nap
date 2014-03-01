@@ -265,12 +265,12 @@ describe "A REST Request" do
 
   it "yields the underlying Net::HTTP request object for additional configuration" do
     yielded_http_request = nil
-
-    REST::Request.new(:get, URI.parse('http://example.com/heya')) do |http_request|
+    request = REST::Request.new(:get, URI.parse('http://example.com/heya')) do |http_request|
       yielded_http_request = http_request
-    end.perform
+    end
 
-    http_request = REST::Request._last_http_request
+    http_request = request.http_request
+    http_request.should.not.be.nil
     http_request.should == yielded_http_request
   end
 end

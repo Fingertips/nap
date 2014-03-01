@@ -94,41 +94,13 @@ module REST
       end
     end
     
+    # Configures and returns a new <tt>Net::HTTP</tt> request object
     def http_request
       if http_proxy
-        http_proxy.new(url.host, url.port)
+        http_request = http_proxy.new(url.host, url.port)
       else
-        Net::HTTP.new(url.host, url.port)
+        http_request = Net::HTTP.new(url.host, url.port)
       end
-    end
-    
-    # Performs the actual request and returns a REST::Response object with the response
-    def perform
-      case verb
-      when :get
-        self.request = Net::HTTP::Get.new(path, headers)
-      when :head
-        self.request = Net::HTTP::Head.new(path, headers)
-      when :delete
-        self.request = Net::HTTP::Delete.new(path, headers)
-      when :patch
-        self.request = Net::HTTP::Patch.new(path, headers)
-        self.request.body = body
-      when :put
-        self.request = Net::HTTP::Put.new(path, headers)
-        self.request.body = body
-      when :post
-        self.request = Net::HTTP::Post.new(path, headers)
-        self.request.body = body
-      else
-        raise ArgumentError, "Unknown HTTP verb `#{verb}'"
-      end
-      
-      if options[:username] and options[:password]
-        request.basic_auth(options[:username], options[:password])
-      end
-      
-      http_request = http_request()
       
       # enable SSL/TLS
       if url.scheme == 'https'
@@ -165,6 +137,37 @@ module REST
       if @configure_block
         @configure_block.call(http_request)
       end
+      
+      http_request
+    end
+    
+    # Performs the actual request and returns a REST::Response object with the response
+    def perform
+      case verb
+      when :get
+        self.request = Net::HTTP::Get.new(path, headers)
+      when :head
+        self.request = Net::HTTP::Head.new(path, headers)
+      when :delete
+        self.request = Net::HTTP::Delete.new(path, headers)
+      when :patch
+        self.request = Net::HTTP::Patch.new(path, headers)
+        self.request.body = body
+      when :put
+        self.request = Net::HTTP::Put.new(path, headers)
+        self.request.body = body
+      when :post
+        self.request = Net::HTTP::Post.new(path, headers)
+        self.request.body = body
+      else
+        raise ArgumentError, "Unknown HTTP verb `#{verb}'"
+      end
+      
+      if options[:username] and options[:password]
+        request.basic_auth(options[:username], options[:password])
+      end
+      
+      http_request = http_request()
       
       begin
         response = http_request.start { |http| http.request(request) }

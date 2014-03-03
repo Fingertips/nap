@@ -39,3 +39,11 @@ all of the request methods.
 To enable the proxy settings in Nap, you can either use the HTTP\_PROXY or http\_proxy enviroment variable.
 
     $ env HTTP_PROXY=http://rob:secret@192.167.1.254:665 ruby app.rb
+
+## Contributions
+
+Nap couldn't be the shining beacon in the eternal darkness without help from:
+
+* Eloy Durán
+* Joshua Sierles
+* Thijs van der Vossen

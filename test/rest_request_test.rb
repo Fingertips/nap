@@ -262,13 +262,21 @@ describe "A REST Request" do
       request.http_request.proxy_address.should == '192.168.0.1'
     end
   end
-
+  
+  it "forwards options when initializing a new request with perform" do
+    yielded_http_request = nil
+    REST::Request.perform(:get, URI.parse('http://example.com/pigeon')) do |http_request|
+      yielded_http_request = http_request
+    end
+    REST::Request._last_http_request.should == yielded_http_request
+  end
+  
   it "yields the underlying Net::HTTP request object for additional configuration" do
     yielded_http_request = nil
     request = REST::Request.new(:get, URI.parse('http://example.com/heya')) do |http_request|
       yielded_http_request = http_request
     end
-
+    
     http_request = request.http_request
     http_request.should.not.be.nil
     http_request.should == yielded_http_request

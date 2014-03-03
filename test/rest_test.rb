@@ -58,4 +58,12 @@ describe "REST" do
     REST.post(uri, body)
     REST::Request._performed.last.should == [:post, URI.parse(uri), body, {}, {}]
   end
+  
+  it "forwards configure block to the REST::Request" do
+    timeout = 342
+    response = REST.get('http://example.com/resources/2') do |http_request|
+      http_request.open_timeout = timeout
+    end
+    REST::Request._last_http_request.open_timeout.should == timeout
+  end
 end

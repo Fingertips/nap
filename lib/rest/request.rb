@@ -35,6 +35,11 @@ module REST
     #     {'Accept' => 'application/json, */*', 'Content-Type' => 'application/json; charset=utf-8'}
     #   )
     #
+    #   # Pass a block to configure the underlying +Net::HTTP+ request.
+    #   request = REST::Request.new(:get, URI.parse('http://example.com/pigeons/largest')) do |http_request|
+    #     http_request.open_timeout = 15 # seconds
+    #   end
+    #
     # == Authentication example
     #
     #   request = REST::Request.new(:put,

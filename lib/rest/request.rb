@@ -146,26 +146,31 @@ module REST
       http_request
     end
     
-    # Performs the actual request and returns a REST::Response object with the response
-    def perform
+    def request_for_verb
       case verb
       when :get
-        self.request = Net::HTTP::Get.new(path, headers)
+        Net::HTTP::Get.new(path, headers)
       when :head
-        self.request = Net::HTTP::Head.new(path, headers)
+        Net::HTTP::Head.new(path, headers)
       when :delete
-        self.request = Net::HTTP::Delete.new(path, headers)
+        Net::HTTP::Delete.new(path, headers)
       when :patch
-        self.request = Net::HTTP::Patch.new(path, headers)
-        self.request.body = body
+        Net::HTTP::Patch.new(path, headers)
       when :put
-        self.request = Net::HTTP::Put.new(path, headers)
-        self.request.body = body
+        Net::HTTP::Put.new(path, headers)
       when :post
-        self.request = Net::HTTP::Post.new(path, headers)
-        self.request.body = body
+        Net::HTTP::Post.new(path, headers)
       else
         raise ArgumentError, "Unknown HTTP verb `#{verb}'"
+      end
+    end
+    
+    # Performs the actual request and returns a REST::Response object with the response
+    def perform
+      self.request = request_for_verb
+      
+      if [:patch, :put, :post].include?(verb)
+        request.body = body
       end
       
       if options[:username] and options[:password]

@@ -155,7 +155,11 @@ module REST
       when :delete
         Net::HTTP::Delete.new(path, headers)
       when :patch
-        Net::HTTP::Patch.new(path, headers)
+        if defined?(Net::HTTP::Patch)
+          Net::HTTP::Patch.new(path, headers)
+        else
+          raise ArgumentError, "This version of the Ruby standard library doesn't support PATCH"
+        end
       when :put
         Net::HTTP::Put.new(path, headers)
       when :post

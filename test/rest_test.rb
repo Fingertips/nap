@@ -26,11 +26,23 @@ describe "REST" do
     REST::Request._performed.last.should == [:delete, URI.parse(uri), nil, {}, {}]
   end
   
-  it "should PATCH a resource" do
-    uri = 'http://example.com/resources/1'
-    body = 'name=Manfred'
-    REST.patch(uri, body)
-    REST::Request._performed.last.should == [:patch, URI.parse(uri), body, {}, {}]
+  if defined?(Net::HTTP::Patch.new)
+    
+    it "should PATCH a resource" do
+      uri = 'http://example.com/resources/1'
+      body = 'name=Manfred'
+      REST.patch(uri, body)
+      REST::Request._performed.last.should == [:patch, URI.parse(uri), body, {}, {}]
+    end
+  
+  else
+    
+    it "should NOT PATCH a resource" do
+      lambda do
+        REST.patch('http://example.com/resources/1', 'name=Manfred')
+      end.should.raise(ArgumentError)
+    end
+    
   end
   
   it "should PUT a resource" do

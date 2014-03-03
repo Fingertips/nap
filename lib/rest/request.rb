@@ -16,9 +16,12 @@ module REST
     #   * <tt>tls_verify/verify_ssl</tt>: Verify the server certificate against known CA's
     #   * <tt>tls_ca_file</tt>: Use a specific file for CA certificates instead of the built-in one
     #     this only works when <tt>:tls_verify</tt> is also set.
-    #   * <tt>tls_key_and_certificate_file</tt>: The client key and certificate file to use for this request
+    #   * <tt>tls_key_and_certificate_file</tt>: The client key and certificate file to use for this
+    #     request
     #   * <tt>tls_certificate</tt>: The client certficate to use for this request
     #   * <tt>tls_key</tt>: The client private key to use for this request
+    # * <tt>configure_block</tt>: An optional block that yields the underlying <tt>Net::HTTP</tt>
+    #   request object allowing for more fine-grained configuration
     #
     # == Examples
     #
@@ -60,12 +63,13 @@ module REST
     #     :tls_verify => true,
     #     :tls_ca_file => '/home/alice/keys/example.pem'
     #   })
-    def initialize(verb, url, body=nil, headers={}, options={})
+    def initialize(verb, url, body=nil, headers={}, options={}, &configure_block)
       @verb = verb
       @url = url
       @body = body
       @headers = headers
       @options = options
+      @configure_block = configure_block
     end
     
     # Returns the path (including the query) for the request
@@ -90,41 +94,13 @@ module REST
       end
     end
     
+    # Configures and returns a new <tt>Net::HTTP</tt> request object
     def http_request
       if http_proxy
-        http_proxy.new(url.host, url.port)
+        http_request = http_proxy.new(url.host, url.port)
       else
-        Net::HTTP.new(url.host, url.port)
+        http_request = Net::HTTP.new(url.host, url.port)
       end
-    end
-    
-    # Performs the actual request and returns a REST::Response object with the response
-    def perform
-      case verb
-      when :get
-        self.request = Net::HTTP::Get.new(path, headers)
-      when :head
-        self.request = Net::HTTP::Head.new(path, headers)
-      when :delete
-        self.request = Net::HTTP::Delete.new(path, headers)
-      when :patch
-        self.request = Net::HTTP::Patch.new(path, headers)
-        self.request.body = body
-      when :put
-        self.request = Net::HTTP::Put.new(path, headers)
-        self.request.body = body
-      when :post
-        self.request = Net::HTTP::Post.new(path, headers)
-        self.request.body = body
-      else
-        raise ArgumentError, "Unknown HTTP verb `#{verb}'"
-      end
-      
-      if options[:username] and options[:password]
-        request.basic_auth(options[:username], options[:password])
-      end
-      
-      http_request = http_request()
       
       # enable SSL/TLS
       if url.scheme == 'https'
@@ -158,6 +134,41 @@ module REST
         end
       end
       
+      if @configure_block
+        @configure_block.call(http_request)
+      end
+      
+      http_request
+    end
+    
+    # Performs the actual request and returns a REST::Response object with the response
+    def perform
+      case verb
+      when :get
+        self.request = Net::HTTP::Get.new(path, headers)
+      when :head
+        self.request = Net::HTTP::Head.new(path, headers)
+      when :delete
+        self.request = Net::HTTP::Delete.new(path, headers)
+      when :patch
+        self.request = Net::HTTP::Patch.new(path, headers)
+        self.request.body = body
+      when :put
+        self.request = Net::HTTP::Put.new(path, headers)
+        self.request.body = body
+      when :post
+        self.request = Net::HTTP::Post.new(path, headers)
+        self.request.body = body
+      else
+        raise ArgumentError, "Unknown HTTP verb `#{verb}'"
+      end
+      
+      if options[:username] and options[:password]
+        request.basic_auth(options[:username], options[:password])
+      end
+      
+      http_request = http_request()
+      
       begin
         response = http_request.start { |http| http.request(request) }
       rescue EOFError => error
@@ -169,9 +180,10 @@ module REST
     # Shortcut for REST::Request.new(*args).perform.
     #
     # See new for options.
-    def self.perform(*args)
-      request = new(*args)
+    def self.perform(*args, &configure_block)
+      request = new(*args, &configure_block)
       request.perform
     end
   end
 end
+

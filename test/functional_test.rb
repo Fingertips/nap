@@ -35,7 +35,10 @@ else
     BASE_URL = 'http://localhost:32776'
     
     it "returns the body of the response" do
-      response = REST.get(BASE_URL + '/')
+      response = REST.get(BASE_URL + '/') do |http_request|
+        http_request.open_timeout = 15
+        http_request.set_debug_output(STDERR)
+      end
       response.body.should == "OK!\n"
     end
     

@@ -9,10 +9,10 @@ module REST
       alias _perform perform
     end
     
-    def self.perform(*args)
+    def self.perform(*args, &configure_block)
       REST::Request._performed ||= []
       REST::Request._performed << args
-      _perform(*args)
+      _perform(*args, &configure_block)
     end
     
     alias _http_request http_request

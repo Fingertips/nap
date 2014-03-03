@@ -1,8 +1,8 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    peck (0.2.0)
-    rake (10.0.4)
+    peck (0.5.3)
+    rake (10.1.1)
 
 PLATFORMS
   ruby

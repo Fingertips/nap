@@ -3,6 +3,9 @@ require 'uri'
 # REST is basically a convenience wrapper around Net::HTTP. It defines a simple and consistant API for doing REST-style
 # HTTP calls.
 module REST
+  # Library version
+  VERSION = '0.7.0pre0'
+  
   # Raised when the remote server disconnects when reading the response
   class DisconnectedError < StandardError; end
   

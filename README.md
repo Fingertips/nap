@@ -1,6 +1,7 @@
 # Nap
 
-It be an extremely simple REST library, yo!
+Nap is an extremely simple REST client for Ruby. It was built to quickly
+fire off HTTP requests without having to research net/http internals.
 
 ## Example
 
@@ -21,6 +22,16 @@ It be an extremely simple REST library, yo!
     else
       puts "Something went wrong (#{response.status_code})"
       puts response.body
+    end
+
+## Advanced request configuration
+
+If you need more control over the Net::HTTP request you can pass a block to
+all of the request methods. 
+
+    response = REST.get('http://google.com') do |http_request|
+      http_request.open_timeout = 15
+      http_request.set_debug_output(STDERR)
     end
 
 ## Proxy support

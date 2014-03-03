@@ -26,6 +26,13 @@ describe "REST" do
     REST::Request._performed.last.should == [:delete, URI.parse(uri), nil, {}, {}]
   end
   
+  it "should PATCH a resource" do
+    uri = 'http://example.com/resources/1'
+    body = 'name=Manfred'
+    REST.patch(uri, body)
+    REST::Request._performed.last.should == [:patch, URI.parse(uri), body, {}, {}]
+  end
+  
   it "should PUT a resource" do
     uri = 'http://example.com/resources/1'
     body = 'name=Manfred'

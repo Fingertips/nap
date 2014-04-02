@@ -79,7 +79,7 @@ module REST
     
     # Returns the path (including the query) for the request
     def path
-      [url.path, url.query].compact.join('?')
+      [url.path.empty? ? '/' : url.path, url.query].compact.join('?')
     end
     
     def proxy_env

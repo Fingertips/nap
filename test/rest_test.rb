@@ -13,13 +13,7 @@ describe "REST" do
     REST.get(uri)
     REST::Request._performed.last.should == [:get, URI.parse(uri), nil, {}, {}]
   end
-
-  it "should GET a URL without a path" do
-    uri = 'http://example.com'
-    REST.get(uri)
-    REST::Request._performed.last.should == [:get, URI.parse(uri + '/'), nil, {}, {}]
-  end
-
+  
   it "should HEAD a resource" do
     uri = 'http://example.com/resources/1'
     REST.head(uri)

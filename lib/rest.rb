@@ -4,7 +4,7 @@ require 'uri'
 # HTTP calls.
 module REST
   # Library version
-  VERSION = '0.7.0pre2'
+  VERSION = '0.7.0pre3'
   
   # Raised when the remote server disconnects when reading the response
   class DisconnectedError < StandardError; end

@@ -1,7 +1,10 @@
 require 'uri'
 
-# REST is basically a convenience wrapper around Net::HTTP. It defines a simple and consistant API for doing REST-style
-# HTTP calls.
+# REST is basically a convenience wrapper around Net::HTTP. It defines a simple and consistant API
+# for doing REST-style HTTP calls.
+#
+# In addition it provides wrappers for the many error classes that can be raised while making
+# requests. See REST::Error for a complete discussion of options.
 module REST
   # Library version
   VERSION = '0.7.0'
@@ -101,5 +104,6 @@ module REST
   end
 end
 
+require File.expand_path('../rest/error', __FILE__)
 require File.expand_path('../rest/request', __FILE__)
 require File.expand_path('../rest/response', __FILE__)

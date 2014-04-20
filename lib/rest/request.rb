@@ -111,6 +111,7 @@ module REST
       if url.scheme == 'https'
         require 'net/https'
         require 'openssl'
+        Error::Connection.extend_classes!
         
         http_request.use_ssl = true
         

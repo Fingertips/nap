@@ -17,7 +17,13 @@ Gem::Specification.new do |spec|
     Nap is a really simple REST library.
   EOF
 
-  spec.files = ['lib/rest.rb', 'lib/rest/request.rb', 'lib/rest/response.rb', 'support/cacert.pem']
+  spec.files = [
+    'lib/rest.rb',
+    'lib/rest/error.rb',
+    'lib/rest/request.rb',
+    'lib/rest/response.rb',
+    'support/cacert.pem'
+  ]
 
   spec.has_rdoc = true
   spec.extra_rdoc_files = ['README.md', 'LICENSE']

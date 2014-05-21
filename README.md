@@ -44,9 +44,9 @@ To enable the proxy settings in Nap, you can either use the HTTP\_PROXY or http\
 Nap defines one top-level and three main error types which allow you to catch a whole range of exceptions thrown by underlying protocol implementations.
 
 * *REST::Error*: Any type of error
-* *REST::Timeout*: Read timeouts of various sorts
-* *REST::Connection*: Connection errors caused by dropped sockets
-* *REST::Protocol*: Request failed because of a problem when handling the HTTP request or response
+* *REST::Error::Timeout*: Read timeouts of various sorts
+* *REST::Error::Connection*: Connection errors caused by dropped sockets
+* *REST::Error::Protocol*: Request failed because of a problem when handling the HTTP request or response
 
 In the most basic case you can rescue from the top-level type to warn about fetching problems.
 

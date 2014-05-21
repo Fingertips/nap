@@ -26,8 +26,7 @@ fire off HTTP requests without having to research net/http internals.
 
 ## Advanced request configuration
 
-If you need more control over the Net::HTTP request you can pass a block to
-all of the request methods. 
+If you need more control over the Net::HTTP request you can pass a block to all of the request methods. 
 
     response = REST.get('http://google.com') do |http_request|
       http_request.open_timeout = 15
@@ -39,6 +38,23 @@ all of the request methods.
 To enable the proxy settings in Nap, you can either use the HTTP\_PROXY or http\_proxy enviroment variable.
 
     $ env HTTP_PROXY=http://rob:secret@192.167.1.254:665 ruby app.rb
+
+## Exceptions
+
+Nap defines one top-level and three main error types which allow you to catch a whole range of exceptions thrown by underlying protocol implementations.
+
+* *REST::Error*: Any type of error
+* *REST::Timeout*: Read timeouts of various sorts
+* *REST::Connection*: Connection errors caused by dropped sockets
+* *REST::Protocol*: Request failed because of a problem when handling the HTTP request or response
+
+In the most basic case you can rescue from the top-level type to warn about fetching problems.
+
+	begin
+	  REST.get('http://example.com/pigeons/12')
+	rescue REST::Error
+	  puts "[!] Failed to fetch Pigeon number 12."
+	end
 
 ## Contributions
 

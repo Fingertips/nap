@@ -7,7 +7,7 @@ require 'uri'
 # requests. See REST::Error for a complete discussion of options.
 module REST
   # Library version
-  VERSION = '0.8.0.pre'
+  VERSION = '0.8.0'
   
   # Raised when the remote server disconnects when reading the response
   class DisconnectedError < StandardError; end

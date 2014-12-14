@@ -5,33 +5,36 @@ fire off HTTP requests without having to research net/http internals.
 
 ## Example
 
-    gem 'nap'
-    require 'rest'
-    require 'json'
-    
-    response = REST.get('http://twitter.com/statuses/friends_timeline.json', {},
-      {:username => '_evan', :password => 'buttonscat'}
-    )
-    if response.ok?
-      timeline = JSON.parse(response.body)
-      puts(timeline.map do |item|
-        "#{item['user']['name']}\n\n#{item['text']}"
-      end.join("\n\n--\n\n"))
-    elsif response.forbidden?
-      puts "Are you sure you're `_evan' and your password is the name of your cat?"
-    else
-      puts "Something went wrong (#{response.status_code})"
-      puts response.body
-    end
+```ruby
+gem 'nap'
+require 'rest'
+require 'json'
+
+response = REST.get('http://twitter.com/statuses/friends_timeline.json', {},
+  {:username => '_evan', :password => 'buttonscat'}
+)
+if response.ok?
+  timeline = JSON.parse(response.body)
+  puts(timeline.map do |item|
+    "#{item['user']['name']}\n\n#{item['text']}"
+  end.join("\n\n--\n\n"))
+elsif response.forbidden?
+  puts "Are you sure you're `_evan' and your password is the name of your cat?"
+else
+  puts "Something went wrong (#{response.status_code})"
+  puts response.body
+end
+```
 
 ## Advanced request configuration
 
 If you need more control over the Net::HTTP request you can pass a block to all of the request methods. 
-
-    response = REST.get('http://google.com') do |http_request|
-      http_request.open_timeout = 15
-      http_request.set_debug_output(STDERR)
-    end
+```ruby
+response = REST.get('http://google.com') do |http_request|
+  http_request.open_timeout = 15
+  http_request.set_debug_output(STDERR)
+end
+```
 
 ## Proxy support
 
@@ -50,11 +53,13 @@ Nap defines one top-level and three main error types which allow you to catch a 
 
 In the most basic case you can rescue from the top-level type to warn about fetching problems.
 
-	begin
-	  REST.get('http://example.com/pigeons/12')
-	rescue REST::Error
-	  puts "[!] Failed to fetch Pigeon number 12."
-	end
+```ruby
+begin
+  REST.get('http://example.com/pigeons/12')
+rescue REST::Error
+  puts "[!] Failed to fetch Pigeon number 12."
+end
+```
 
 ## Contributions
 

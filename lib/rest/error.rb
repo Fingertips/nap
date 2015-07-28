@@ -40,6 +40,7 @@ module REST
           Errno::ECONNABORTED
           Errno::ECONNREFUSED
           Errno::ECONNRESET
+          Errno::EHOSTDOWN
           Errno::EHOSTUNREACH
           Errno::EINVAL
           Errno::ENETUNREACH

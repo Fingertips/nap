@@ -7,7 +7,7 @@ require 'uri'
 # requests. See REST::Error for a complete discussion of options.
 module REST
   # Library version
-  VERSION = '0.8.0'
+  VERSION = '1.0.0'
   
   # Performs a GET on a resource. See REST::Request.new for a complete discussion of options.
   #

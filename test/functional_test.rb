@@ -45,7 +45,7 @@ else
     it "raises an exception when the server disconnects" do
       begin
         REST.get(BASE_URL + '/disconnect')
-      rescue EOFError => e
+      rescue REST::Error::Connection => e
         e.message.should == 'end of file reached'
       else
         fail

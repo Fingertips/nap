@@ -9,9 +9,6 @@ module REST
   # Library version
   VERSION = '0.8.0'
   
-  # Raised when the remote server disconnects when reading the response
-  class DisconnectedError < StandardError; end
-  
   # Performs a GET on a resource. See REST::Request.new for a complete discussion of options.
   #
   #   response = REST.get('http://example.com/pigeons/12',

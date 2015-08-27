@@ -181,7 +181,7 @@ describe "A REST Request" do
       Net::HTTP.start_raises = EOFError.new('failed')
       lambda {
         REST.get('/something')
-      }.should.raise(REST::DisconnectedError)
+      }.should.raise(EOFError)
     ensure
       Net::HTTP.start_raises = nil
     end

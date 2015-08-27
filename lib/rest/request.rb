@@ -183,12 +183,7 @@ module REST
       end
       
       http_request = http_request()
-      
-      begin
-        response = http_request.start { |http| http.request(request) }
-      rescue EOFError => error
-        raise REST::DisconnectedError, error.message
-      end
+      response = http_request.start { |http| http.request(request) }
       REST::Response.new(response.code, response.instance_variable_get('@header'), response.body)
     end
     

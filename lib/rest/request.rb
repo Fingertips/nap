@@ -173,10 +173,7 @@ module REST
     # Performs the actual request and returns a REST::Response object with the response
     def perform
       self.request = request_for_verb
-      
-      if [:patch, :put, :post].include?(verb)
-        request.body = body
-      end
+      request.body = body
       
       if options[:username] and options[:password]
         request.basic_auth(options[:username], options[:password])

@@ -29,9 +29,11 @@ describe "A REST Request" do
   end
 
   it "should GET a resource including a query" do
-    request = REST::Request.new(:get, URI.parse('http://example.com/resources?q=first'))
+    body = "hello"
+    request = REST::Request.new(:get, URI.parse('http://example.com/resources?q=first'), body)
     response = request.perform
-    
+   
+    request.request.body.should == body 
     request.request.path.should == '/resources?q=first'
     response.status_code.should == 200
     response.body.should == 'It works!'
@@ -45,9 +47,11 @@ describe "A REST Request" do
   end
   
   it "should DELETE a resource" do
-    request = REST::Request.new(:delete, URI.parse('http://example.com/resources/1'))
+    body="hello"
+    request = REST::Request.new(:delete, URI.parse('http://example.com/resources/1'), body)
     response = request.perform
     
+    request.request.body.should == body 
     response.status_code.should == 200
   end
   

@@ -71,6 +71,10 @@ Nap couldn't be the shining beacon in the eternal darkness without help from:
 
 For all other great human beings, please visit the GitHub contributors page.
 
+## Changes from 1.0.0 to 1.1.0
+
+* REST::Request now allows all HTTP verbs to send a body entity.
+
 ## Changes from 0.8.0 to 1.0.0
 
 * Removed REST::DisconnectedError, please use REST::Error::Connection instead.

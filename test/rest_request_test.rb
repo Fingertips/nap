@@ -29,13 +29,22 @@ describe "A REST Request" do
   end
 
   it "should GET a resource including a query" do
-    body = "hello"
-    request = REST::Request.new(:get, URI.parse('http://example.com/resources?q=first'), body)
+    request = REST::Request.new(:get, URI.parse('http://example.com/resources?q=first'))
     response = request.perform
-   
-    request.request.body.should == body 
+    
     request.request.path.should == '/resources?q=first'
     response.status_code.should == 200
+    response.body.should == 'It works!'
+  end
+
+  it "should GET a resource with an entity body" do
+    body = 'return=false'
+    request = REST::Request.new(:get, URI.parse('http://example.com/resources/1'), body)
+    response = request.perform
+    
+    response.status_code.should == 200
+    request.request.body.should == body
+    request.request.path.should == '/resources/1'
     response.body.should == 'It works!'
   end
   
@@ -47,44 +56,48 @@ describe "A REST Request" do
   end
   
   it "should DELETE a resource" do
-    body="hello"
+    request = REST::Request.new(:delete, URI.parse('http://example.com/resources/1'))
+    response = request.perform
+    
+    response.status_code.should == 200
+  end
+  
+  it "should DELETE a resouce with an entity body" do
+    body = "hello"
     request = REST::Request.new(:delete, URI.parse('http://example.com/resources/1'), body)
     response = request.perform
     
-    request.request.body.should == body 
+    request.request.body.should == body
     response.status_code.should == 200
   end
   
   it "should PATCH a resource" do
     body = 'name=Manfred'
     request = REST::Request.new(:put, URI.parse('http://example.com/resources/1'), body)
-    
     response = request.perform
-    request.request.body.should == body
     
     response.status_code.should == 200
+    request.request.body.should == body
     response.body.should == 'It works!'
   end
   
   it "should PUT a resource" do
     body = 'name=Manfred'
     request = REST::Request.new(:put, URI.parse('http://example.com/resources/1'), body)
-    
     response = request.perform
-    request.request.body.should == body
     
     response.status_code.should == 200
+    request.request.body.should == body
     response.body.should == 'It works!'
   end
   
   it "should POST a resource" do
     body = 'name=Manfred'
     request = REST::Request.new(:post, URI.parse('http://example.com/resources'), body)
-    
     response = request.perform
-    request.request.body.should == body
     
     response.status_code.should == 200
+    request.request.body.should == body
     response.body.should == 'It works!'
   end
   

@@ -36,6 +36,7 @@ module REST
     module Connection
       def self.class_names
         %w(
+          DisconnectedError
           EOFError
           Errno::ECONNABORTED
           Errno::ECONNREFUSED

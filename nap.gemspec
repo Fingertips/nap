@@ -29,6 +29,6 @@ Gem::Specification.new do |spec|
   spec.extra_rdoc_files = ['README.md', 'LICENSE']
   spec.rdoc_options << "--charset=utf-8"
 
-  spec.add_development_dependency('rake', '~> 10')
+  spec.add_development_dependency('rake', '~> 12')
   spec.add_development_dependency('peck', '~> 0.5')
 end

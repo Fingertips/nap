@@ -1,71 +1,72 @@
 # frozen_string_literal: true
 
-require File.expand_path('helper', __dir__)
+require_relative 'test_helper'
 
-describe 'REST' do
-  before do
-    http_response = Net::HTTPOK.new('1.1', '200', 'OK')
-    http_response.read_body = 'It works!'
-    http_response.add_field('Content-type', 'text/html')
-    Net::HTTP.start_returns = http_response
-  end
+module REST
+  class RestTest < REST::Test
+    def setup
+      stub_request(:any, /example\.com/).to_return(status: 200, body: 'It works!')
+    end
 
-  it 'should GET a resource' do
-    uri = 'http://example.com/resources/1'
-    REST.get(uri)
-    REST::Request._performed.last.should == [:get, URI.parse(uri), nil, {}, {}]
-  end
+    test 'GETs a resource' do
+      uri = 'http://example.com/resources/1'
+      assert_equal 200, REST.get(uri).status_code
+      assert_requested :get, uri
+    end
 
-  it 'should HEAD a resource' do
-    uri = 'http://example.com/resources/1'
-    REST.head(uri)
-    REST::Request._performed.last.should == [:head, URI.parse(uri), nil, {}, {}]
-  end
+    test 'HEADs a resource' do
+      uri = 'http://example.com/resources/1'
+      assert_equal 200, REST.head(uri).status_code
+      assert_requested :head, uri
+    end
 
-  it 'should DELETE a resource' do
-    uri = 'http://example.com/resources/1'
-    REST.delete(uri)
-    REST::Request._performed.last.should == [:delete, URI.parse(uri), nil, {}, {}]
-  end
+    test 'DELETEs a resource' do
+      uri = 'http://example.com/resources/1'
+      assert_equal 200, REST.delete(uri).status_code
+      assert_requested :delete, uri
+    end
 
-  if defined?(Net::HTTP::Patch.new)
-
-    it 'should PATCH a resource' do
+    test 'PATCHes a resource' do
       uri = 'http://example.com/resources/1'
       body = 'name=Manfred'
-      REST.patch(uri, body)
-      REST::Request._performed.last.should == [:patch, URI.parse(uri), body, {}, {}]
+      assert_equal 200, REST.patch(uri, body).status_code
+      assert_requested :patch, uri, body: body
     end
 
-  else
-
-    it 'should NOT PATCH a resource' do
-      lambda do
-        REST.patch('http://example.com/resources/1', 'name=Manfred')
-      end.should.raise(ArgumentError)
+    test 'PUTs a resource' do
+      uri = 'http://example.com/resources/1'
+      body = 'name=Manfred'
+      assert_equal 200, REST.put(uri, body).status_code
+      assert_requested :put, uri, body: body
     end
 
-  end
-
-  it 'should PUT a resource' do
-    uri = 'http://example.com/resources/1'
-    body = 'name=Manfred'
-    REST.put(uri, body)
-    REST::Request._performed.last.should == [:put, URI.parse(uri), body, {}, {}]
-  end
-
-  it 'should POST a resource' do
-    uri = 'http://example.com/resources'
-    body = 'name=Manfred'
-    REST.post(uri, body)
-    REST::Request._performed.last.should == [:post, URI.parse(uri), body, {}, {}]
-  end
-
-  it 'forwards configure block to the REST::Request' do
-    timeout = 342
-    REST.get('http://example.com/resources/2') do |http_request|
-      http_request.open_timeout = timeout
+    test 'POSTs a resource' do
+      uri = 'http://example.com/resources'
+      body = 'name=Manfred'
+      assert_equal 200, REST.post(uri, body).status_code
+      assert_requested :post, uri, body: body
     end
-    REST::Request._last_http_request.open_timeout.should == timeout
+
+    test 'forwards headers to the request' do
+      uri = 'http://example.com/resources/1'
+      REST.get(uri, { 'Accept' => 'text/plain' })
+      assert_requested :get, uri, headers: { 'Accept' => 'text/plain' }
+    end
+
+    test 'forwards options to the request' do
+      uri = 'http://example.com/resources/1'
+      REST.get(uri, {}, { username: 'admin', password: 'secret' })
+      assert_requested :get, uri, headers: { 'Authorization' => 'Basic YWRtaW46c2VjcmV0' }
+    end
+
+    test 'forwards the configure block to the request' do
+      timeout = 342
+      yielded_http_request = nil
+      REST.get('http://example.com/resources/2') do |http_request|
+        http_request.open_timeout = timeout
+        yielded_http_request = http_request
+      end
+      assert_equal timeout, yielded_http_request.open_timeout
+    end
   end
 end

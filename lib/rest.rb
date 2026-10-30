@@ -7,8 +7,8 @@ require 'uri'
 # requests. See REST::Error for a complete discussion of options.
 module REST
   # Library version
-  VERSION = '1.1.0'
-  
+  VERSION = '1.2.0'
+
   # Performs a GET on a resource. See REST::Request.new for a complete discussion of options.
   #
   #   response = REST.get('http://example.com/pigeons/12',
@@ -23,7 +23,7 @@ module REST
   def self.get(uri, headers={}, options={}, &configure_block)
     REST::Request.perform(:get, URI.parse(uri), nil, headers, options, &configure_block)
   end
-  
+
   # Performs a HEAD on a resource. See REST::Request.new for a complete discussion of options.
   #
   #   response = REST.head('http://example.com/pigeons/12')
@@ -51,7 +51,7 @@ module REST
   def self.delete(uri, headers={}, options={}, &configure_block)
     REST::Request.perform(:delete, URI.parse(uri), nil, headers, options, &configure_block)
   end
-  
+
   # Performs a PATCH on a resource. See REST::Request.new for a complete discussion of options.
   #
   #   response = REST.patch('http://example.com/pigeons/12',
@@ -67,7 +67,7 @@ module REST
   def self.patch(uri, body, headers={}, options={}, &configure_block)
     REST::Request.perform(:patch, URI.parse(uri), body, headers, options, &configure_block)
   end
-  
+
   # Performs a PUT on a resource. See REST::Request.new for a complete discussion of options.
   #
   #   response = REST.put('http://example.com/pigeons/12',
@@ -83,7 +83,7 @@ module REST
   def self.put(uri, body, headers={}, options={}, &configure_block)
     REST::Request.perform(:put, URI.parse(uri), body, headers, options, &configure_block)
   end
-  
+
   # Performs a POST on a resource. See REST::Request.new for a complete discussion of options.
   #
   #   response = REST.post('http://example.com/pigeons',

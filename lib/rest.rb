@@ -9,7 +9,7 @@ require 'uri'
 # requests. See REST::Error for a complete discussion of options.
 module REST
   # Library version
-  VERSION = '1.1.1'
+  VERSION = '1.2.0.pre'
 
   # Performs a GET on a resource. See REST::Request.new for a complete discussion of options.
   #

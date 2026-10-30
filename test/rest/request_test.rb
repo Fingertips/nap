@@ -156,7 +156,7 @@ module REST
       http_request = request.http_request
 
       assert http_request.use_ssl?
-      assert_equal File.join(GEM_ROOT, 'support/cacert.pem'), http_request.ca_file
+      assert_nil http_request.ca_file
       assert_equal OpenSSL::SSL::VERIFY_PEER, http_request.verify_mode
     end
 

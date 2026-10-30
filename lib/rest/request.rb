@@ -16,9 +16,9 @@ module REST
     # * <tt>options</tt>: A hash of additional options
     #   * <tt>username</tt>: Username to use for basic authentication
     #   * <tt>password</tt>: Password to use for basic authentication
-    #   * <tt>tls_verify/verify_ssl</tt>: Verify the server certificate against known CA's
-    #   * <tt>tls_ca_file</tt>: Use a specific file for CA certificates instead of the built-in one
-    #     this only works when <tt>:tls_verify</tt> is also set.
+    #   * <tt>tls_verify/verify_ssl</tt>: Disable CA verification when you really don't want it
+    #   * <tt>tls_ca_file</tt>: Use a specific file for CA certificates instead of the system
+    #     provided bundle, for example when using your own internal CA chain.
     #   * <tt>tls_key_and_certificate_file</tt>: The client key and certificate file to use for this
     #     request
     #   * <tt>tls_certificate</tt>: The client certficate to use for this request
@@ -120,19 +120,8 @@ module REST
         Error::Connection.extend_classes!
 
         http_request.use_ssl = true
-
-        if options[:tls_verify] || options[:verify_ssl]
-          if http_request.respond_to?(:enable_post_connection_check=)
-            http_request.enable_post_connection_check = true
-          end
-          # from http://curl.haxx.se/ca/cacert.pem
-          http_request.ca_file = options[:tls_ca_file] || File.expand_path(
-            '../../support/cacert.pem', __dir__
-          )
-          http_request.verify_mode = OpenSSL::SSL::VERIFY_PEER
-        else
-          http_request.verify_mode = OpenSSL::SSL::VERIFY_NONE
-        end
+        http_request.ca_file = options[:tls_ca_file]
+        http_request.verify_mode = verify_mode
 
         if options[:tls_key_and_certificate_file]
           key_and_certificate       = File.read(options[:tls_key_and_certificate_file])
@@ -200,6 +189,23 @@ module REST
     def self.perform(*, &)
       request = new(*, &)
       request.perform
+    end
+
+    private
+
+    def verify_mode
+      if verify_tls?
+        OpenSSL::SSL::VERIFY_PEER
+      else
+        OpenSSL::SSL::VERIFY_NONE
+      end
+    end
+
+    def verify_tls?
+      return false if options[:tls_verify] == false
+      return false if options[:verify_ssl] == false
+
+      true
     end
   end
 end

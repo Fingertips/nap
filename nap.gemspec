@@ -21,8 +21,7 @@ Gem::Specification.new do |spec|
     'lib/rest.rb',
     'lib/rest/error.rb',
     'lib/rest/request.rb',
-    'lib/rest/response.rb',
-    'support/cacert.pem'
+    'lib/rest/response.rb'
   ]
 
   spec.has_rdoc = true

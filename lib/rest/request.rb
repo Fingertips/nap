@@ -34,7 +34,7 @@ module REST
     #
     #   request = REST::Request.new(:post,
     #     URI.parse('http://example.com/pigeons'),
-    #     {'name' => 'Homr'}.to_json,
+    #     {'name' => 'Homer'}.to_json,
     #     {'Accept' => 'application/json, */*', 'Content-Type' => 'application/json; charset=utf-8'}
     #   )
     #
@@ -54,27 +54,26 @@ module REST
     #       'Accept' => 'application/json, */*',
     #       'Content-Type' => 'application/json; charset=utf-8'
     #     },
-    #     {:username => 'Admin', :password => 'secret'}
+    #     { username: 'Admin', password: 'secret'}
     #   )
     #
     # == TLS / SSL examples
     #
     #   # Use a client key and certificate
     #   request = REST::Request.new(:get, URI.parse('https://example.com/pigeons/1'), nil, {}, {
-    #     :tls_key_and_certificate_file => '/home/alice/keys/example.pem'
+    #     tls_key_and_certificate_file: '/home/alice/keys/example.pem'
     #   })
     #
     #   # Use a client certificate and key from a specific location
     #   key_and_certificate = File.read('/home/alice/keys/example.pem')
     #   request = REST::Request.new(:get, URI.parse('https://example.com/pigeons/1'), nil, {}, {
-    #     :tls_key => OpenSSL::PKey::RSA.new(key_and_certificate),
-    #     :tls_certificate => OpenSSL::X509::Certificate.new(key_and_certificate)
+    #     tls_key: OpenSSL::PKey::RSA.new(key_and_certificate),
+    #     tls_certificate: OpenSSL::X509::Certificate.new(key_and_certificate)
     #   })
     #
     #   # Verify the server certificate against a specific certificate
     #   request = REST::Request.new(:get, URI.parse('https://example.com/pigeons/1'), nil, {}, {
-    #     :tls_verify => true,
-    #     :tls_ca_file => '/home/alice/keys/example.pem'
+    #     tls_ca_file: '/home/alice/keys/example.pem'
     #   })
     def initialize(verb, url, body = nil, headers = {}, options = {}, &configure_block)
       @verb = verb

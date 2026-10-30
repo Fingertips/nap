@@ -5,8 +5,10 @@ process do |file_or_path, _|
   when /^(html|tmp|support)/
     # Skip
   when /_test\.rb\Z/
+    watcher.execute "bundle exec rubocop -A #{file_or_path}"
     watcher.execute "bundle exec ruby #{file_or_path}"
   when /^lib/, 'README.rdoc'
+    watcher.execute "bundle exec rubocop -A #{file_or_path}" if file_or_path.end_with?(".rb")
     watcher.execute "rake documentation:generate &> /dev/null &"
    end
   last_file_or_path = file_or_path

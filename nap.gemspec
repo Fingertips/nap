@@ -29,9 +29,6 @@ Gem::Specification.new do |spec|
   spec.extra_rdoc_files = ['README.md', 'LICENSE']
   spec.rdoc_options << '--charset=utf-8'
 
-  spec.add_development_dependency('minitest', '~> 6')
-  spec.add_development_dependency('rake', '~> 13')
-
   spec.required_ruby_version = ">= 3.3"
   spec.metadata['rubygems_mfa_required'] = 'true'
 end

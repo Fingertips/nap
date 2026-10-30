@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'net/http'
 
 module Net
@@ -9,7 +11,10 @@ module Net
     class TryingToMakeHTTPConnectionException < StandardError; end
 
     def connect
-      raise TryingToMakeHTTPConnectionException, "Please mock your HTTP calls so you don't do any HTTP requests."
+      raise(
+        TryingToMakeHTTPConnectionException,
+        "Please mock your HTTP calls so you don't do any HTTP requests."
+      )
     end
 
     class << self
@@ -17,11 +22,9 @@ module Net
     end
 
     def start
-      if self.class.start_raises
-        raise self.class.start_raises
-      else
-        self.class.start_returns
-      end
+      raise self.class.start_raises if self.class.start_raises
+
+      self.class.start_returns
     end
   end
 end

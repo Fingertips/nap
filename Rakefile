@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'rake/testtask'
 
-desc "Run all specs by default"
-task :default => :test
+desc 'Run all specs by default'
+task default: :test
 
-desc "Run all specs"
-task :test => ['test:unit', 'test:functional']
+desc 'Run all specs'
+task test: ['test:unit', 'test:functional']
 
 namespace :test do
   Rake::TestTask.new('unit') do |t|
@@ -19,12 +21,12 @@ namespace :test do
 end
 
 namespace :gem do
-  desc "Build the gem"
+  desc 'Build the gem'
   task :build do
     sh 'gem build nap.gemspec'
   end
 
-  task :install => :build do
+  task install: :build do
     sh 'sudo gem install nap-*.gem'
   end
 end
@@ -36,15 +38,15 @@ end
 
 begin
   require 'rdoc/task'
-rescue
+rescue StandardError
 end
 
 if defined?(RDoc::Task)
   namespace :documentation do
     RDoc::Task.new do |rd|
-      rd.main = "lib/rest.rb"
-      rd.rdoc_files.include("LICENSE", "lib/**/*.rb")
-      rd.options << "--all" << "--charset" << "utf-8"
+      rd.main = 'lib/rest.rb'
+      rd.rdoc_files.include('LICENSE', 'lib/**/*.rb')
+      rd.options << '--all' << '--charset' << 'utf-8'
     end
   end
 end

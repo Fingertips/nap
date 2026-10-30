@@ -1,12 +1,14 @@
-require File.expand_path('../lib/rest', __FILE__)
+# frozen_string_literal: true
+
+require File.expand_path('lib/rest', __dir__)
 
 Gem::Specification.new do |spec|
   spec.name = 'nap'
   spec.version = REST::VERSION
 
-  spec.author = "Manfred Stienstra"
-  spec.email = "manfred@fngtps.com"
-  spec.homepage = "https://github.com/Fingertips/nap"
+  spec.author = 'Manfred Stienstra'
+  spec.email = 'manfred@fngtps.com'
+  spec.homepage = 'https://github.com/Fingertips/nap'
   spec.licenses = ['MIT']
 
   spec.description = <<-EOF
@@ -27,8 +29,9 @@ Gem::Specification.new do |spec|
 
   spec.has_rdoc = true
   spec.extra_rdoc_files = ['README.md', 'LICENSE']
-  spec.rdoc_options << "--charset=utf-8"
+  spec.rdoc_options << '--charset=utf-8'
 
-  spec.add_development_dependency('rake', '~> 13')
   spec.add_development_dependency('minitest', '~> 6')
+  spec.add_development_dependency('rake', '~> 13')
+  spec.metadata['rubygems_mfa_required'] = 'true'
 end

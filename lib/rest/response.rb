@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module REST
   # Response holds a HTTP response
   class Response
@@ -19,28 +21,28 @@ module REST
       [422, :unprocessable_entity],
       [404, :not_found],
       [500, :internal_server_error]
-    ]
-    
+    ].freeze
+
     attr_accessor :body, :headers, :status_code
-    
+
     # * <tt>status_code</tt>: The status code of the response (ie. 200 or '404')
     # * <tt>headers</tt>: The headers of the response
     # * <tt>body</tt>: The body of the response
-    def initialize(status_code, headers={}, body='')
+    def initialize(status_code, headers = {}, body = '')
       @status_code = status_code.to_i
       @headers = headers
       @body = body
     end
-    
+
     CODES.each do |code, name|
       define_method "#{name}?" do
         status_code == code
       end
     end
-    
+
     # Returns _true_ when the status code is in the 2XX range. Returns false otherwise.
     def success?
-      (status_code.to_s =~ /2../) ? true : false
+      status_code.to_s =~ /2../ ? true : false
     end
   end
 end

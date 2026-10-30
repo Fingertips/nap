@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'uri'
 
 # REST is basically a convenience wrapper around Net::HTTP. It defines a simple and consistant API
@@ -8,7 +10,7 @@ require 'uri'
 module REST
   # Library version
   VERSION = '1.1.1'
-  
+
   # Performs a GET on a resource. See REST::Request.new for a complete discussion of options.
   #
   #   response = REST.get('http://example.com/pigeons/12',
@@ -20,10 +22,10 @@ module REST
   #   else
   #     puts "Couldn't fetch your pigeon (#{response.status_code})"
   #   end
-  def self.get(uri, headers={}, options={}, &configure_block)
-    REST::Request.perform(:get, URI.parse(uri), nil, headers, options, &configure_block)
+  def self.get(uri, headers = {}, options = {}, &)
+    REST::Request.perform(:get, URI.parse(uri), nil, headers, options, &)
   end
-  
+
   # Performs a HEAD on a resource. See REST::Request.new for a complete discussion of options.
   #
   #   response = REST.head('http://example.com/pigeons/12')
@@ -34,8 +36,8 @@ module REST
   #   else
   #     puts "Couldn't fetch your pigeon (#{response.status_code})"
   #   end
-  def self.head(uri, headers={}, options={}, &configure_block)
-    REST::Request.perform(:head, URI.parse(uri), nil, headers, options, &configure_block)
+  def self.head(uri, headers = {}, options = {}, &)
+    REST::Request.perform(:head, URI.parse(uri), nil, headers, options, &)
   end
 
   # Performs a DELETE on a resource. See REST::Request.new for a complete discussion of options.
@@ -48,10 +50,10 @@ module REST
   #   else
   #     puts "Couldn't delete your pigeon (#{response.status_code})"
   #   end
-  def self.delete(uri, headers={}, options={}, &configure_block)
-    REST::Request.perform(:delete, URI.parse(uri), nil, headers, options, &configure_block)
+  def self.delete(uri, headers = {}, options = {}, &)
+    REST::Request.perform(:delete, URI.parse(uri), nil, headers, options, &)
   end
-  
+
   # Performs a PATCH on a resource. See REST::Request.new for a complete discussion of options.
   #
   #   response = REST.patch('http://example.com/pigeons/12',
@@ -64,10 +66,10 @@ module REST
   #     puts "Couldn't rename your pigeon (#{response.status_code})"
   #     puts XML.parse(response.body).reason
   #   end
-  def self.patch(uri, body, headers={}, options={}, &configure_block)
-    REST::Request.perform(:patch, URI.parse(uri), body, headers, options, &configure_block)
+  def self.patch(uri, body, headers = {}, options = {}, &)
+    REST::Request.perform(:patch, URI.parse(uri), body, headers, options, &)
   end
-  
+
   # Performs a PUT on a resource. See REST::Request.new for a complete discussion of options.
   #
   #   response = REST.put('http://example.com/pigeons/12',
@@ -80,10 +82,10 @@ module REST
   #     puts "Couldn't replace your pigeon (#{response.status_code})"
   #     puts XML.parse(response.body).reason
   #   end
-  def self.put(uri, body, headers={}, options={}, &configure_block)
-    REST::Request.perform(:put, URI.parse(uri), body, headers, options, &configure_block)
+  def self.put(uri, body, headers = {}, options = {}, &)
+    REST::Request.perform(:put, URI.parse(uri), body, headers, options, &)
   end
-  
+
   # Performs a POST on a resource. See REST::Request.new for a complete discussion of options.
   #
   #   response = REST.post('http://example.com/pigeons',
@@ -96,11 +98,11 @@ module REST
   #     puts "Couldn't create your pigeon (#{response.status_code})"
   #     puts XML.parse(response.body).reason
   #   end
-  def self.post(uri, body, headers={}, options={}, &configure_block)
-    REST::Request.perform(:post, URI.parse(uri), body, headers, options, &configure_block)
+  def self.post(uri, body, headers = {}, options = {}, &)
+    REST::Request.perform(:post, URI.parse(uri), body, headers, options, &)
   end
 end
 
-require File.expand_path('../rest/error', __FILE__)
-require File.expand_path('../rest/request', __FILE__)
-require File.expand_path('../rest/response', __FILE__)
+require File.expand_path('rest/error', __dir__)
+require File.expand_path('rest/request', __dir__)
+require File.expand_path('rest/response', __dir__)

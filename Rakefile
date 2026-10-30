@@ -42,8 +42,8 @@ end
 if defined?(RDoc::Task)
   namespace :documentation do
     RDoc::Task.new do |rd|
-      rd.main = "README"
-      rd.rdoc_files.include("README", "LICENSE", "lib/**/*.rb")
+      rd.main = "lib/rest.rb"
+      rd.rdoc_files.include("LICENSE", "lib/**/*.rb")
       rd.options << "--all" << "--charset" << "utf-8"
     end
   end

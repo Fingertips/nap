@@ -10,7 +10,9 @@ gem 'nap'
 require 'rest'
 require 'json'
 
-response = REST.get('http://twitter.com/statuses/friends_timeline.json', {},
+response = REST.get(
+  'https://example.com/timelines/friends.json',
+  {},
   {:username => '_evan', :password => 'buttonscat'}
 )
 if response.ok?

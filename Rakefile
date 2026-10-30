@@ -28,23 +28,3 @@ namespace :gem do
     sh 'sudo gem install nap-*.gem'
   end
 end
-
-begin
-  require 'rdoc/task'
-rescue LoadError
-end
-
-begin
-  require 'rake/rdoctask'
-rescue
-end
-
-if defined?(Rake::RDocTask)
-  namespace :documentation do
-    Rake::RDocTask.new(:generate) do |rd|
-      rd.main = "README"
-      rd.rdoc_files.include("README", "LICENSE", "lib/**/*.rb")
-      rd.options << "--all" << "--charset" << "utf-8"
-    end
-  end
-end

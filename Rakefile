@@ -11,7 +11,7 @@ namespace :test do
     t.test_files = FileList['test/rest*_test.rb']
     t.verbose = true
   end
-  
+
   Rake::TestTask.new('functional') do |t|
     t.test_files = FileList['test/functional_test.rb']
     t.verbose = true
@@ -23,7 +23,7 @@ namespace :gem do
   task :build do
     sh 'gem build nap.gemspec'
   end
-  
+
   task :install => :build do
     sh 'sudo gem install nap-*.gem'
   end
@@ -35,13 +35,13 @@ rescue LoadError
 end
 
 begin
-  require 'rake/rdoctask'
+  require 'rdoc/task'
 rescue
 end
 
-if defined?(Rake::RDocTask)
+if defined?(RDoc::Task)
   namespace :documentation do
-    Rake::RDocTask.new(:generate) do |rd|
+    RDoc::Task.new do |rd|
       rd.main = "README"
       rd.rdoc_files.include("README", "LICENSE", "lib/**/*.rb")
       rd.options << "--all" << "--charset" << "utf-8"

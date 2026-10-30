@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'net/http'
 
 module REST
@@ -23,19 +25,19 @@ module REST
     # This constant can be used to rescue only the known `Timeout` error classes.
     module Timeout
       def self.class_names
-        %w(
+        %w[
           Errno::ETIMEDOUT
           Timeout::Error
           Net::OpenTimeout
           Net::ReadTimeout
-        )
+        ]
       end
     end
 
     # This constant can be used to rescue only the known `Connection` error classes.
     module Connection
       def self.class_names
-        %w(
+        %w[
           EOFError
           Errno::ECONNABORTED
           Errno::ECONNREFUSED
@@ -46,23 +48,21 @@ module REST
           Errno::ENETUNREACH
           SocketError
           OpenSSL::SSL::SSLError
-        )
+        ]
       end
     end
 
     # This constant can be used to rescue only the known `Protocol` error classes.
     module Protocol
       def self.class_names
-        %w(
+        %w[
           Net::HTTPBadResponse
           Net::HTTPHeaderSyntaxError
           Net::ProtocolError
           Zlib::GzipFile::Error
-        )
+        ]
       end
     end
-
-    private
 
     [Timeout, Connection, Protocol].each do |mod|
       mod.send(:include, Error)
@@ -70,14 +70,12 @@ module REST
       # Collect all the error classes that exist at runtime.
       def mod.classes
         class_names.map do |name|
-          begin
-            # MRI < 2 does not support full constant paths for `Object.const_get`.
-            name.split('::').inject(Object) do |current, const|
-              current.const_get(const)
-            end
-          rescue NameError
-            nil
+          # MRI < 2 does not support full constant paths for `Object.const_get`.
+          name.split('::').inject(Object) do |current, const|
+            current.const_get(const)
           end
+        rescue NameError
+          nil
         end.compact
       end
 

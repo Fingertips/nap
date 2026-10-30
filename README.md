@@ -10,7 +10,9 @@ gem 'nap'
 require 'rest'
 require 'json'
 
-response = REST.get('http://twitter.com/statuses/friends_timeline.json', {},
+response = REST.get(
+  'https://example.com/timelines/friends.json',
+  {},
   {:username => '_evan', :password => 'buttonscat'}
 )
 if response.ok?
@@ -71,7 +73,13 @@ Nap couldn't be the shining beacon in the eternal darkness without help from:
 
 For all other great human beings, please visit the GitHub contributors page.
 
-## Changes from 1.0.0 to 1.1.1
+## Changes from 1.1.1 to 1.2.0
+
+* We no longer bundle cacert.pem because it's dangerous when it's not updated frequently enough, that's a job for the Ruby distribution or the operating system.
+* Changes the default for the `tls_verify:` and `verify_ssl:` options to `true` instead of `false` to make it harder to accidentally make a connection where TLS certs are not verified.
+* Modernizes the code a bit to we're sure it runs on Ruby 3.3 and 4.0.
+
+## Changes from 1.1.0 to 1.1.1
 
 * Updated cacert.pem.
 

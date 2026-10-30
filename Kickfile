@@ -1,0 +1,27 @@
+# frozen_string_literal: true
+
+last_file_or_path = nil
+
+process do |file_or_path, _|
+  case file_or_path
+  when %r{\A.git}
+    # Skip
+  when %r{_test\.rb\Z}
+    watcher.execute("bundle exec rubocop -A #{file_or_path}")
+    watcher.execute("bundle exec ruby #{file_or_path}")
+  when %r{\.rb\Z}
+    watcher.execute("bundle exec rubocop -A #{file_or_path}")
+    test_parts = file_or_path.split("/")
+    test_filename = "#{File.basename(test_parts.last, ".*")}_test.rb"
+    test_path = ["test", *test_parts[1..-2], test_filename].join("/")
+    if File.exist?(test_path)
+      watcher.execute("bundle exec ruby #{test_path}")
+    else
+      puts "No test named #{test_path}"
+    end
+  else
+    warn "⊠ #{file_or_path}"
+  end
+
+  last_file_or_path = file_or_path
+end

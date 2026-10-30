@@ -1,0 +1,39 @@
+AllCops:
+  NewCops: enable
+  SuggestExtensions: false
+  TargetRubyVersion: 3.3
+  Exclude:
+    - vendor/**/*
+Layout/LineLength:
+  Max: 100
+Metrics/AbcSize:
+  Exclude:
+    # Legacy.
+    - lib/rest/request.rb
+Metrics/BlockLength:
+  Exclude:
+    # Test blocks are long.
+    - test/**/*_test.rb
+Metrics/ClassLength:
+  Max: 150
+  Exclude:
+    # Test classes are long.
+    - test/**/*_test.rb
+Metrics/CyclomaticComplexity:
+   Exclude:
+    # Legacy.
+    - lib/rest/request.rb
+Metrics/MethodLength:
+  Max: 14
+  Exclude:
+    # Test methods are long.
+    - test/**/*_test.rb
+    # Legacy.
+    - lib/rest/request.rb
+Metrics/PerceivedComplexity:
+  Exclude:
+    # Legacy.
+    - lib/rest/request.rb
+Style/AsciiComments:
+  # We like to have UTF-8 in our comments.
+  Enabled: false

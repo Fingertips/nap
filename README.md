@@ -1,7 +1,8 @@
 # Nap
 
-Nap is an extremely simple REST client for Ruby. It was built to quickly
-fire off HTTP requests without having to research net/http internals.
+> Please don't use Nap in new projects. I know that the net/http looks scary but it's better in the long run to stay closer to Ruby's stdlib. Thanks, and have a nice day 🙂.
+
+Nap is an extremely simple REST client for Ruby. It was built to quickly fire off HTTP requests without having to research net/http internals.
 
 ## Example
 

@@ -1,0 +1,25 @@
+AllCops:
+  NewCops: enable
+  SuggestExtensions: false
+  TargetRubyVersion: 3.3
+  Exclude:
+    - vendor/**/*
+Layout/LineLength:
+  Max: 100
+Metrics/BlockLength:
+  Exclude:
+    # Test blocks are long.
+    - test/**/*_test.rb
+Metrics/ClassLength:
+  Max: 150
+  Exclude:
+    # Test classes are long.
+    - test/**/*_test.rb
+Metrics/MethodLength:
+  Max: 14
+  Exclude:
+    # Test methods are long.
+    - test/**/*_test.rb
+Style/AsciiComments:
+  # We like to have UTF-8 in our comments.
+  Enabled: false

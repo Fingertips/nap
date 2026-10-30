@@ -139,8 +139,8 @@ describe "A REST Request" do
     if http_request.respond_to?(:enable_post_connection_check=)
       http_request.enable_post_connection_check.should == true
     end
-    
-    http_request.ca_file.should == File.expand_path('../../support/cacert.pem', __FILE__)
+
+    http_request.ca_file.should == nil
     http_request.verify_mode.should == OpenSSL::SSL::VERIFY_PEER
   end
   

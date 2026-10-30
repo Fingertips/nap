@@ -11,24 +11,24 @@ Gem::Specification.new do |spec|
   spec.homepage = 'https://github.com/Fingertips/nap'
   spec.licenses = ['MIT']
 
-  spec.description = <<-EOF
+  spec.description = <<-DESCRIPTION
     Nap is a really simple REST library. It allows you to perform HTTP requests
     with minimal amounts of code.
-  EOF
-  spec.summary = <<-EOF
+  DESCRIPTION
+  spec.summary = <<-DESCRIPTION
     Nap is a really simple REST library.
-  EOF
+  DESCRIPTION
 
   spec.files = [
     'lib/rest.rb',
     'lib/rest/error.rb',
     'lib/rest/request.rb',
-    'lib/rest/response.rb',
+    'lib/rest/response.rb'
   ]
 
   spec.extra_rdoc_files = ['README.md', 'LICENSE']
   spec.rdoc_options << '--charset=utf-8'
 
-  spec.required_ruby_version = ">= 3.3"
+  spec.required_ruby_version = '>= 3.3'
   spec.metadata['rubygems_mfa_required'] = 'true'
 end

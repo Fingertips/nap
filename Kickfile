@@ -1,0 +1,13 @@
+last_file_or_path = nil
+
+process do |file_or_path, _|
+  case file_or_path
+  when /^(html|tmp|support)/
+    # Skip
+  when /_test\.rb\Z/
+    watcher.execute "bundle exec ruby #{file_or_path}"
+  when /^lib/, 'README.rdoc'
+    watcher.execute "rake documentation:generate &> /dev/null &"
+   end
+  last_file_or_path = file_or_path
+end

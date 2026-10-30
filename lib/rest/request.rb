@@ -2,6 +2,7 @@
 
 require 'uri'
 require 'net/http'
+require 'net/https'
 
 module REST
   # Request holds a HTTP request
@@ -117,8 +118,6 @@ module REST
 
       # enable SSL/TLS
       if url.scheme == 'https'
-        require 'net/https'
-        require 'openssl'
         Error::Connection.extend_classes!
 
         http_request.use_ssl = true
